@@ -84,12 +84,12 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "value", key = NUL
       full_info <- strsplit(line, ":")[[1]]
       
       if(length(full_info) != length(col_names)+1)
-        stop("Missing attributes/values in series")
+        stop("Missing attributes/values in series.")
       
       series <- as.numeric(strsplit(tail(full_info, 1), ",")[[1]])
       
-      if(is.na(series) || is.null(series) || series == "")
-        stop("Missing series values")
+      if(sum(is.na(series)) == length(series))
+        stop("All series values are missing. A given series should contains a set of comma separated numeric values. At least one numeric value should be there in a series.")
       
       values <- c(values, series)
       row_count <- row_count + length(series)
@@ -99,14 +99,14 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "value", key = NUL
       for(col in 1:length(col_names)){
         if(col_names[col] == time_attribute_name){
           if(is.null(frequency))
-            stop("Frequency is missing")
+            stop("Frequency is missing.")
           else{
             if(frequency %in% LOW_FREQUENCIES)
                 start_time <- as.POSIXct(attributes[col], format = "%Y-%m-%d %H-%M-%S")
             else if(frequency %in% HIGH_FREQUENCIES)
                 start_time <- as.Date(attributes[col], format = "%Y-%m-%d %H-%M-%S")
             else
-                stop("Invalid frequency")
+                stop("Invalid frequency.")
             
             if(is.na(start_time))
               stop("Incorrect timestamp format. Specify your timestamps as YYYY-mm-dd HH-MM-SS")
@@ -133,7 +133,7 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "value", key = NUL
     
     if(!(is.null(key) | is.null(index))){
       if(!(key %in% col_names & index %in% col_names))
-        stop("Invalid key and index. Cannot convert the dataframe into tsibble")
+        stop("Invalid key and index. Cannot convert the dataframe into tsibble format.")
       
       data <- as_tsibble(data, key = key, index = index)
     }
@@ -143,7 +143,3 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "value", key = NUL
 
 options(pillar.sigfig = 7)
 tsibble_data <- convert_ts_to_tsibble(paste0(BASE_DIR, "sample.ts"), "series_value", "series_name", "start_timestamp")
-
-
-
-
