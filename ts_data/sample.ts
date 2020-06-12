@@ -7,8 +7,8 @@
 # AusGrid, 2019. Solar home electricity data. Accessed: 2020-05-10. URL https://www.ausgrid.com.au/Industry/Our-Research/Data-to-share/Solar-home-electricity-data
 #
 @relation Ausgrid
-@attribute series_name
-@attribute start_timestamp
+@attribute series_name string
+@attribute start_timestamp date
 @frequency weekly
 @horizon 8
 @missing false
