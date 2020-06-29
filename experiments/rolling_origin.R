@@ -107,7 +107,7 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
       train_series_data <- rbind(train_series_data, test_series_data[i,])
     }
     
-    write.table(t(c(all_serie_names[s], series_forecasts)), paste0(BASE_DIR, "results/", output_file_name), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE, append = TRUE)
+    write.table(t(c(all_serie_names[s], series_forecasts)), paste0(BASE_DIR, "results/forecasts/", output_file_name), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE, append = TRUE)
     
     train_series_data <- train_series_data[[VALUE_COL_NAME]][1:split]
     test_series_data <- test_series_data[[VALUE_COL_NAME]]
@@ -128,7 +128,7 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   
   end_time <- Sys.time()
   
-  calculate_errors(forecast_matrix, actual_matrix, train_matrix, seasonality)
+  calculate_errors(forecast_matrix, actual_matrix, train_matrix, seasonality, paste0(BASE_DIR, "results/errors/", dataset_name, "_", method))
   
   # Execution time
   print(end_time - start_time)
@@ -140,6 +140,3 @@ do_rolling_origin_forecating("sample", "theta", "sample.ts", "series_name", "sta
 do_rolling_origin_forecating("sample", "ses", "sample.ts", "series_name", "start_timestamp")
 do_rolling_origin_forecating("sample", "tbats", "sample.ts", "series_name", "start_timestamp")
 do_rolling_origin_forecating("sample", "dhr_arima", "sample.ts", "series_name", "start_timestamp")
-
-
-
