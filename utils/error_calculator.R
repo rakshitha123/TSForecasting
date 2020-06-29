@@ -90,8 +90,9 @@ calculate_rmse <- function(forecasts, test_set){
 # test_set - a matrix with the same dimensions as 'forecasts' containing the actual values corresponding with them
 # training_set - a matrix containing the training series
 # seasonality - frequency of the dataset, e.g. 12 for monthly
+# output_file_name - The prefix of error file names
 # address_near_zero_insability - whether the forecasts or actual values can have zeros or not
-calculate_errors <- function(forecasts, test_set, training_set, seasonality, address_near_zero_insability = FALSE){
+calculate_errors <- function(forecasts, test_set, training_set, seasonality, output_file_name, address_near_zero_insability = FALSE){
   #calculating smape
   smape_per_series <- calculate_smape(forecasts, test_set, address_near_zero_insability)
   
@@ -103,6 +104,11 @@ calculate_errors <- function(forecasts, test_set, training_set, seasonality, add
   
   #calculating rmse
   rmse_per_series <- calculate_rmse(forecasts, test_set)
+  
+  write.table(smape_per_series, paste0(output_file_name, "_smape.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
+  write.table(mase_per_series, paste0(output_file_name, "_mase.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
+  write.table(mae_per_series, paste0(output_file_name, "_mae.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
+  write.table(rmse_per_series, paste0(output_file_name, "_rmse.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
   
   print(paste0("Mean SMAPE: ", mean(smape_per_series)))
   print(paste0("Median SMAPE: ", median(smape_per_series)))
