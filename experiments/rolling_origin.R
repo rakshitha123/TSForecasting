@@ -15,7 +15,11 @@ ROLLING_ORIGIN_FORECAST_HORIZON <- 1
 
 # seasonality values corresponding with the frequencies: 10_minutes, half_hourly, hourly, daily, weekly, monthly, quarterly and yearly
 SEASONALITY_VALS <- c(144, 48, 24, 7, 365.25/7, 12, 4, 1)
-SEASONALITY_MAP <- hashmap:::hashmap(FREQUENCIES, SEASONALITY_VALS)
+
+SEASONALITY_MAP <- list()
+
+for(f in 1:length(FREQUENCIES))
+  SEASONALITY_MAP[[FREQUENCIES[f]]] <- SEASONALITY_VALS[f]
 
 
 # This function finds the maximum lengths of traing and test sections that a dataset can have based on the length of its series
@@ -140,3 +144,4 @@ do_rolling_origin_forecating("sample", "theta", "sample.ts", "series_name", "sta
 do_rolling_origin_forecating("sample", "ses", "sample.ts", "series_name", "start_timestamp")
 do_rolling_origin_forecating("sample", "tbats", "sample.ts", "series_name", "start_timestamp")
 do_rolling_origin_forecating("sample", "dhr_arima", "sample.ts", "series_name", "start_timestamp")
+
