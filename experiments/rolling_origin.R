@@ -1,4 +1,4 @@
-BASE_DIR <- "C:/Projects/TSForecasting/"
+BASE_DIR <- "TSForecasting/"
 
 source(paste0(BASE_DIR, "utils/data_loader.R"))
 source(paste0(BASE_DIR, "utils/error_calculator.R"))
