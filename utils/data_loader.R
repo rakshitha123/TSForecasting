@@ -1,9 +1,7 @@
-library(tsibble)
-library(hashmap)
+options(pillar.sigfig = 7)
 
-BASE_DIR <- "TSForecasting/ts_data/"
 
-#Extend these frequency lists as required
+# Extend these frequency lists as required
 LOW_FREQUENCIES <- c("10_minutes", "half_hourly", "hourly")
 LOW_FREQ_VALS <- c("10 min", "30 min", "1 hour")
 HIGH_FREQUENCIES <- c("daily", "weekly", "monthly", "quarterly", "yearly")
@@ -11,18 +9,19 @@ HIGH_FREQ_VALS <- c("1 day", "1 week", "1 month", "3 months", "1 year")
 FREQUENCIES <- c(LOW_FREQUENCIES, HIGH_FREQUENCIES)
 FREQ_VALS <- c(LOW_FREQ_VALS, HIGH_FREQ_VALS)
 
-#Create a hashmap containing possible frequency key-value pairs
-FREQ_MAP <- hashmap(FREQUENCIES, FREQ_VALS)
 
-forecast_horizon <- NULL
-frequency <- NULL
+# Create a hashmap containing possible frequency key-value pairs
+FREQ_MAP <- hashmap:::hashmap(FREQUENCIES, FREQ_VALS)
 
-#This function convert the contents in a .ts file into a tsibble or a dataframe
-#file - .ts file path
-#value_column_name - Any name that is preferred to have as the name of the column containing series values in the returning tsibble
-#key - The name of the attribute that should be used as the key when creating the tsibble. If doesn't provide, a data frame will be returned
-#index - The name of the time attribute that should be used as the index when creating the tsibble. If doesn't provide, a data frame will be returned
-convert_ts_to_tsibble <-   function(file, value_column_name = "value", key = NULL, index = NULL){
+
+# This function converts the contents in a .ts file into a tsibble or a dataframe and returns it along with other meta-data of the dataset: frequency, horizon, whether the dataset contains missing values and whether the series have equal lengths
+#
+# Parameters
+# file - .ts file path
+# value_column_name - Any name that is preferred to have as the name of the column containing series values in the returning tsibble
+# key - The name of the attribute that should be used as the key when creating the tsibble. If doesn't provide, a data frame will be returned instead of a tsibble
+# index - The name of the time attribute that should be used as the index when creating the tsibble. If doesn't provide, a data frame will be returned instead of a tsibble
+convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", key = NULL, index = NULL){
     if(is.character(file)) {
       file <- file(file, "r")
       on.exit(close(file))
@@ -37,6 +36,10 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "value", key = NUL
     # Read meta-data
     col_names <- NULL
     col_types <- NULL
+    frequency <- NULL
+    forecast_horizon <- NULL
+    contain_missing_values <- NULL
+    contain_equal_length <- NULL
 
     line <- readLines(file, n = 1) #n is no: of lines to read
 
@@ -62,6 +65,10 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "value", key = NUL
             frequency <- line[2]
           else if(line[1] == "@horizon")
             forecast_horizon <- as.numeric(line[2])
+          else if(line[1] == "@missing")
+            contain_missing_values <- as.logical(line[2])
+          else if(line[1] == "@equallength")
+            contain_equal_length <- as.logical(line[2])
         }
       }
       line <- readLines(file, n = 1)
@@ -122,11 +129,11 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "value", key = NUL
 
           att <- append(att, seq(start_time, length=length(series), by=FREQ_MAP[[frequency]]))
         }else{
-          if(col_types[col] == "numeric"){
+          if(col_types[col] == "numeric")
             attributes[col] <- as.numeric(attributes[col])
-          }else if(col_types[col] == "string"){
+          else if(col_types[col] == "string")
             attributes[col] <- as.character(attributes[col])
-          }else
+          else
             stop("Invalid attribute type.")
 
           if(is.na(attributes[col]))
@@ -152,11 +159,22 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "value", key = NUL
       if(!(key %in% col_names & index %in% col_names))
         stop("Invalid key and index. Cannot convert the dataframe into tsibble format.")
 
-      data <- as_tsibble(data, key = key, index = index)
+      data <- tsibble:::build_tsibble(x = data, key = key, index = index, ordered = F)
     }
 
-    data
+    list(data, frequency, forecast_horizon, contain_missing_values, contain_equal_length)
 }
 
-options(pillar.sigfig = 7)
-tsibble_data <- convert_ts_to_tsibble(paste0(BASE_DIR, "sample.ts"), "series_value", "series_name", "start_timestamp")
+
+# Example of usage
+# loaded_data <- convert_ts_to_tsibble("TSForecasting/ts_data/sample.ts", "series_value", "series_name", "start_timestamp")
+# tsibble_data <- loaded_data[[1]]
+# frequency <- loaded_data[[2]]
+# forecast_horizon <- loaded_data[[3]]
+# contain_missing_values <- loaded_data[[4]]
+# contain_equal_length <- loaded_data[[5]]
+
+
+
+
+
