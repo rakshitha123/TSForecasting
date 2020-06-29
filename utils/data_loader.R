@@ -11,7 +11,10 @@ FREQ_VALS <- c(LOW_FREQ_VALS, HIGH_FREQ_VALS)
 
 
 # Create a hashmap containing possible frequency key-value pairs
-FREQ_MAP <- hashmap:::hashmap(FREQUENCIES, FREQ_VALS)
+FREQ_MAP <- list()
+
+for(f in 1:length(FREQUENCIES))
+  FREQ_MAP[[FREQUENCIES[f]]] <- FREQ_VALS[f]
 
 
 # This function converts the contents in a .ts file into a tsibble or a dataframe and returns it along with other meta-data of the dataset: frequency, horizon, whether the dataset contains missing values and whether the series have equal lengths
@@ -173,8 +176,3 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", ke
 # forecast_horizon <- loaded_data[[3]]
 # contain_missing_values <- loaded_data[[4]]
 # contain_equal_length <- loaded_data[[5]]
-
-
-
-
-
