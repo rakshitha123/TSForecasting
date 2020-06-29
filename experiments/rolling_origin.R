@@ -73,7 +73,6 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   start_time <- Sys.time()
   
   for(s in 1:length(all_serie_names)){
-    print(s)
     
     series_data <- dataset[dataset$series_name == as.character(all_serie_names[s]), ]
     
@@ -137,10 +136,10 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
 
 
 # Example of usage
-do_rolling_origin_forecating("nn5_weekly", "theta", "nn5_weekly_dataset.ts", "series_name", "start_timestamp")
-do_rolling_origin_forecating("nn5_weekly", "ses", "nn5_weekly_dataset.ts", "series_name", "start_timestamp")
-do_rolling_origin_forecating("nn5_weekly", "tbats", "nn5_weekly_dataset.ts", "series_name", "start_timestamp")
-do_rolling_origin_forecating("nn5_weekly", "dhr_arima", "nn5_weekly_dataset.ts", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "theta", "sample.ts", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "ses", "sample.ts", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "tbats", "sample.ts", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "dhr_arima", "sample.ts", "series_name", "start_timestamp")
 
 
 
