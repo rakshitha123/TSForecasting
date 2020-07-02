@@ -9,14 +9,14 @@ library(smooth)
 # forecasts - a matrix containing forecasts for a set of series
 #             no: of rows should be equal to number of series and no: of columns should be equal to the forecast horizon 
 # test_set - a matrix with the same dimensions as 'forecasts' containing the actual values corresponding with them
-# address_near_zero_insability - whether the forecasts or actual values contain zeros or not
-calculate_smape <- function(forecasts, test_set, address_near_zero_insability = FALSE){
-  if (address_near_zero_insability == 1) {
+# address_near_zero_instability - whether the forecasts or actual values contain zeros or not
+calculate_smape <- function(forecasts, test_set, address_near_zero_instability = FALSE){
+  if (address_near_zero_instability == 1) {
     # define the custom smape function
     epsilon <- 0.1
     sum <- NULL
-    comparator <- data.frame(matrix((0.5 + epsilon), nrow = nrow(test_set), ncol = ncol(test_set)))
-    sum <- pmax(comparator, (abs(forecast) + abs(test_set) + epsilon))
+    comparator <- matrix((0.5 + epsilon), nrow = nrow(test_set), ncol = ncol(test_set))
+    sum <- pmax(comparator, (abs(forecasts) + abs(test_set) + epsilon))
     smape <- 2 * abs(forecasts - test_set) / (sum)
   }else {
     smape <- 2 * abs(forecasts - test_set) / (abs(forecasts) + abs(test_set))
@@ -91,10 +91,10 @@ calculate_rmse <- function(forecasts, test_set){
 # training_set - a matrix containing the training series
 # seasonality - frequency of the dataset, e.g. 12 for monthly
 # output_file_name - The prefix of error file names
-# address_near_zero_insability - whether the forecasts or actual values can have zeros or not
-calculate_errors <- function(forecasts, test_set, training_set, seasonality, output_file_name, address_near_zero_insability = FALSE){
+# address_near_zero_instability - whether the forecasts or actual values can have zeros or not
+calculate_errors <- function(forecasts, test_set, training_set, seasonality, output_file_name, address_near_zero_instability = FALSE){
   #calculating smape
-  smape_per_series <- calculate_smape(forecasts, test_set, address_near_zero_insability)
+  smape_per_series <- calculate_smape(forecasts, test_set, address_near_zero_instability)
   
   #calculating mase
   mase_per_series <- calculate_mase(forecasts, test_set, training_set, seasonality)
@@ -105,17 +105,28 @@ calculate_errors <- function(forecasts, test_set, training_set, seasonality, out
   #calculating rmse
   rmse_per_series <- calculate_rmse(forecasts, test_set)
   
+  mean_smape <- paste0("Mean SMAPE: ", mean(smape_per_series))
+  median_smape <- paste0("Median SMAPE: ", median(smape_per_series))
+  mean_mase <- paste0("Mean MASE: ", mean(mase_per_series))
+  median_mase <- paste0("Median MASE: ", median(mase_per_series))
+  mean_mae <- paste0("Mean MAE: ", mean(mae_per_series))
+  median_mae <- paste0("Median MAE: ", median(mae_per_series))
+  mean_rmse <- paste0("Mean RMSE: ", mean(rmse_per_series))
+  median_rmse <- paste0("Median RMSE: ", median(rmse_per_series))
+  
+  print(mean_smape)
+  print(median_smape)
+  print(mean_mase)
+  print(median_mase)
+  print(mean_mae)
+  print(median_mae)
+  print(mean_rmse)
+  print(median_rmse)
+  
+  #writing error measures into files
   write.table(smape_per_series, paste0(output_file_name, "_smape.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
   write.table(mase_per_series, paste0(output_file_name, "_mase.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
   write.table(mae_per_series, paste0(output_file_name, "_mae.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
   write.table(rmse_per_series, paste0(output_file_name, "_rmse.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
-  
-  print(paste0("Mean SMAPE: ", mean(smape_per_series)))
-  print(paste0("Median SMAPE: ", median(smape_per_series)))
-  print(paste0("Mean MASE: ", mean(mase_per_series)))
-  print(paste0("Median MASE: ", median(mase_per_series)))
-  print(paste0("Mean MAE: ", mean(mae_per_series)))
-  print(paste0("Median MAE: ", median(mae_per_series)))
-  print(paste0("Mean RMSE: ", mean(rmse_per_series)))
-  print(paste0("Median RMSE: ", median(rmse_per_series)))
+  write(c(mean_smape, median_smape, mean_mase, median_mase, mean_mae, median_mae, mean_rmse, median_rmse, "\n"), file = paste0(output_file_name, ".txt"), append = FALSE)
 }

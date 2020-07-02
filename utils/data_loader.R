@@ -13,7 +13,7 @@ FREQ_VALS <- c(LOW_FREQ_VALS, HIGH_FREQ_VALS)
 # Create a hashmap containing possible frequency key-value pairs
 FREQ_MAP <- list()
 
-for(f in 1:length(FREQUENCIES))
+for(f in seq_along(FREQUENCIES))
   FREQ_MAP[[FREQUENCIES[f]]] <- FREQ_VALS[f]
 
 
@@ -110,7 +110,7 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", ke
 
       attributes <- head(full_info, length(full_info)-1)
 
-      for(col in 1:length(col_names)){
+      for(col in seq_along(col_names)){
 
         att <- eval(parse(text=col_names[col]))
 
@@ -130,7 +130,7 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", ke
               stop("Incorrect timestamp format. Specify your timestamps as YYYY-mm-dd HH-MM-SS")
           }
 
-          att <- append(att, seq(start_time, length=length(series), by=FREQ_MAP[[frequency]]))
+          att <- append(att, seq(start_time, length = length(series), by = FREQ_MAP[[frequency]]))
         }else{
           if(col_types[col] == "numeric")
             attributes[col] <- as.numeric(attributes[col])
@@ -154,7 +154,7 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", ke
     colnames(data) <- c(col_names, value_column_name)
 
     for(col in col_names)
-      data[[col]] <- eval(parse(text=col))
+      data[[col]] <- eval(parse(text = col))
 
     data[[value_column_name]] <- values
 
@@ -170,9 +170,10 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", ke
 
 
 # Example of usage
-# loaded_data <- convert_ts_to_tsibble("TSForecasting/ts_data/sample.ts", "series_value", "series_name", "start_timestamp")
+# loaded_data <- convert_ts_to_tsibble(file.path("TSForecasting", "ts_data", "sample.ts", fsep = "/"), "series_value", "series_name", "start_timestamp")
 # tsibble_data <- loaded_data[[1]]
 # frequency <- loaded_data[[2]]
 # forecast_horizon <- loaded_data[[3]]
 # contain_missing_values <- loaded_data[[4]]
 # contain_equal_length <- loaded_data[[5]]
+
