@@ -47,7 +47,7 @@ calculate_mase <- function(forecasts, test_set, training_set, seasonality){
     f <- as.numeric(forecasts[k,])
     f <- f[!is.na(f)]
     
-    mase_per_series[k] <- MASE(te, f, mean(abs(diff(tr, lag = seasonality, differences = 1))))
+    mase_per_series[k] <- MASE(te, f, mean(abs(diff(tr, lag = max(seasonality), differences = 1))))
   }
   
   mase_per_series
