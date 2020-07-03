@@ -68,6 +68,7 @@ find_train_test_lengths <- function(data, contain_equal_length = TRUE, split = T
 # address_near_zero_instability - whether the dataset contains zeros, this will be used when calculating smape of forecasts
 # integer_conversion - whether the forecasts should be rounded or not
 do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, key = NULL, index = NULL, address_near_zero_instability = FALSE, integer_conversion = FALSE){
+  
   output_file_name <- paste0(dataset_name, "_", method, ".txt")
   
   # Loading data from the .ts file
@@ -92,8 +93,6 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   start_time <- Sys.time()
   
   for(s in seq_along(all_serie_names)){
-    
-    print(s)
     
     series_data <- dataset[dataset$series_name == as.character(all_serie_names[s]), ]
     
@@ -171,8 +170,9 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   calculate_errors(forecast_matrix, actual_matrix, train_matrix, seasonality, file.path(BASE_DIR, "results", "errors", paste0(dataset_name, "_", method), fsep = "/"), address_near_zero_instability)
   
   # Execution time
-  print(end_time - start_time)
-  write(c(end_time - start_time), file = file.path(BASE_DIR, "results", "execution_times", output_file_name, fsep = "/"), append = FALSE)
+  exec_time <- end_time - start_time
+  print(exec_time)
+  write(paste(exec_time, attr(exec_time, "units")), file = file.path(BASE_DIR, "results", "execution_times", output_file_name, fsep = "/"), append = FALSE)
 }
 
 
@@ -181,4 +181,3 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
 # do_rolling_origin_forecating("sample", "ses", "sample.ts", "series_name", "start_timestamp")
 # do_rolling_origin_forecating("sample", "tbats", "sample.ts", "series_name", "start_timestamp")
 # do_rolling_origin_forecating("sample", "dhr_arima", "sample.ts", "series_name", "start_timestamp")
-
