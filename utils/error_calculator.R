@@ -59,6 +59,7 @@ calculate_mase <- function(forecasts, test_set, training_set, seasonality){
     mase_per_series[k] <- mase
   }
   
+  mase_per_series <- mase_per_series[!is.infinite(mase_per_series) & !is.na(mase_per_series)]
   mase_per_series
 }
 
