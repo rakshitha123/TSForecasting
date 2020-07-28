@@ -69,6 +69,8 @@ find_train_test_lengths <- function(data, contain_equal_length = TRUE, split = T
 # integer_conversion - whether the forecasts should be rounded or not
 do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, key = NULL, index = NULL, address_near_zero_instability = FALSE, integer_conversion = FALSE){
   
+  print(paste0("Started ", dataset_name))
+  
   output_file_name <- paste0(dataset_name, "_", method, ".txt")
   
   # Loading data from the .ts file
@@ -92,11 +94,16 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
 
   start_time <- Sys.time()
   
+  print("started Rolling Origin")
+  
   for(s in seq_along(all_serie_names)){
-    
     series_data <- dataset[dataset$series_name == as.character(all_serie_names[s]), ]
     
-    split <- round(nrow(series_data) * TRAIN_SPLIT)
+    if(nrow(series_data) == 2)
+      split <- 1
+    else
+      split <- round(nrow(series_data) * TRAIN_SPLIT)
+    
     train_series_data <- series_data[1:split,]
     test_series_data <- series_data[(split+1):nrow(series_data),]
     
@@ -166,6 +173,8 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   
   end_time <- Sys.time()
   
+  print("Finished rolling origin")
+  
   # Error calculations
   calculate_errors(forecast_matrix, actual_matrix, train_matrix, seasonality, file.path(BASE_DIR, "results", "errors", paste0(dataset_name, "_", method), fsep = "/"), address_near_zero_instability)
   
@@ -177,7 +186,7 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
 
 
 # Example of usage
-# do_rolling_origin_forecating("sample", "theta", "sample.ts", "series_name", "start_timestamp")
-# do_rolling_origin_forecating("sample", "ses", "sample.ts", "series_name", "start_timestamp")
-# do_rolling_origin_forecating("sample", "tbats", "sample.ts", "series_name", "start_timestamp")
-# do_rolling_origin_forecating("sample", "dhr_arima", "sample.ts", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "theta", "sample.ts", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "ses", "sample.ts", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "tbats", "sample.ts", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "dhr_arima", "sample.ts", "series_name", "start_timestamp")
