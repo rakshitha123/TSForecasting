@@ -79,19 +79,21 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   frequency <- loaded_data[[2]]
   contain_equal_length <- loaded_data[[5]]
   
-  if(is.null(frequency))
-    frequency <- 1
   
-  seasonality <- SEASONALITY_MAP[[frequency]]
+  if(!is.null(frequency))
+    seasonality <- SEASONALITY_MAP[[frequency]]
+  else
+    seasonality <- 1
+  
   
   max_train_test_lengths <- find_train_test_lengths(dataset, contain_equal_length)
   
   all_serie_names <- unique(dataset$series_name)
-
+  
   train_matrix <- matrix(NA, nrow = length(all_serie_names), ncol = max_train_test_lengths[[1]])
   actual_matrix <- matrix(NA, nrow = length(all_serie_names), ncol = max_train_test_lengths[[2]])
   forecast_matrix <- matrix(NA, nrow = length(all_serie_names), ncol = max_train_test_lengths[[2]])
-
+  
   start_time <- Sys.time()
   
   print("started Rolling Origin")
