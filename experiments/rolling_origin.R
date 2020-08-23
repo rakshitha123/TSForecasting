@@ -13,17 +13,19 @@ TRAIN_SPLIT <- 0.8
 # The number of forecasts provided in one iteration while performing the rolling origin evaluation
 ROLLING_ORIGIN_FORECAST_HORIZON <- 1
 
-# seasonality values corresponding with the frequencies: 10_minutes, half_hourly, hourly, daily, weekly, monthly, quarterly and yearly
+# seasonality values corresponding with the frequencies: 4_seconds, minutely, 10_minutes, half_hourly, hourly, daily, weekly, monthly, quarterly and yearly
 # consider multiple seasonalities for frequencies less than daily
 SEASONALITY_VALS <- list()
-SEASONALITY_VALS[[1]] <- c(144, 1008, 52596)
-SEASONALITY_VALS[[2]] <- c(48, 336, 17532)
-SEASONALITY_VALS[[3]] <- c(24, 168, 8766)
-SEASONALITY_VALS[[4]] <- 7
-SEASONALITY_VALS[[5]] <- 365.25/7
-SEASONALITY_VALS[[6]] <- 12 
-SEASONALITY_VALS[[7]] <- 4
-SEASONALITY_VALS[[8]] <- 1  
+SEASONALITY_VALS[[1]] <- c(21600, 151200, 7889400)
+SEASONALITY_VALS[[2]] <- c(1440, 10080, 525960)
+SEASONALITY_VALS[[3]] <- c(144, 1008, 52596)
+SEASONALITY_VALS[[4]] <- c(48, 336, 17532)
+SEASONALITY_VALS[[5]] <- c(24, 168, 8766)
+SEASONALITY_VALS[[6]] <- 7
+SEASONALITY_VALS[[7]] <- 365.25/7
+SEASONALITY_VALS[[8]] <- 12 
+SEASONALITY_VALS[[9]] <- 4
+SEASONALITY_VALS[[10]] <- 1  
 
 SEASONALITY_MAP <- list()
 
