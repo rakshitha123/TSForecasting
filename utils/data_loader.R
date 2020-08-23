@@ -2,8 +2,8 @@ options(pillar.sigfig = 7)
 
 
 # Extend these frequency lists as required
-LOW_FREQUENCIES <- c("10_minutes", "half_hourly", "hourly")
-LOW_FREQ_VALS <- c("10 min", "30 min", "1 hour")
+LOW_FREQUENCIES <- c("4_seconds", "minutely", "10_minutes", "half_hourly", "hourly")
+LOW_FREQ_VALS <- c("4 sec", "1 min", "10 min", "30 min", "1 hour")
 HIGH_FREQUENCIES <- c("daily", "weekly", "monthly", "quarterly", "yearly")
 HIGH_FREQ_VALS <- c("1 day", "1 week", "1 month", "3 months", "1 year")
 FREQUENCIES <- c(LOW_FREQUENCIES, HIGH_FREQUENCIES)
@@ -176,4 +176,3 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", ke
 # forecast_horizon <- loaded_data[[3]]
 # contain_missing_values <- loaded_data[[4]]
 # contain_equal_length <- loaded_data[[5]]
-
