@@ -9,21 +9,13 @@ library(smooth)
 # forecasts - a matrix containing forecasts for a set of series
 #             no: of rows should be equal to number of series and no: of columns should be equal to the forecast horizon 
 # test_set - a matrix with the same dimensions as 'forecasts' containing the actual values corresponding with them
-# address_near_zero_instability - whether the forecasts or actual values contain zeros or not
-calculate_smape <- function(forecasts, test_set, address_near_zero_instability = FALSE){
-  if (address_near_zero_instability == 1) {
-    # define the custom smape function
-    epsilon <- 0.1
-    sum <- NULL
-    comparator <- matrix((0.5 + epsilon), nrow = nrow(test_set), ncol = ncol(test_set))
-    sum <- pmax(comparator, (abs(forecasts) + abs(test_set) + epsilon))
-    smape <- 2 * abs(forecasts - test_set) / (sum)
-  }else {
-    smape <- 2 * abs(forecasts - test_set) / (abs(forecasts) + abs(test_set))
-  }
-  
+calculate_smape <- function(forecasts, test_set){
+  epsilon <- 0.1
+  sum <- NULL
+  comparator <- matrix((0.5 + epsilon), nrow = nrow(test_set), ncol = ncol(test_set))
+  sum <- pmax(comparator, (abs(forecasts) + abs(test_set) + epsilon))
+  smape <- 2 * abs(forecasts - test_set) / (sum)
   smape_per_series <- rowMeans(smape, na.rm = TRUE)
-  
   smape_per_series
 }
 
@@ -42,7 +34,7 @@ calculate_mase <- function(forecasts, test_set, training_set, seasonality){
   for(k in 1 :nrow(forecasts)){
     te <- as.numeric(test_set[k,])
     te <- te[!is.na(te)]
-    tr <- as.numeric(training_set[k,])
+    tr <- as.numeric(training_set[[k]])
     tr <- tr[!is.na(tr)]
     f <- as.numeric(forecasts[k,])
     f <- f[!is.na(f)]
@@ -102,9 +94,9 @@ calculate_rmse <- function(forecasts, test_set){
 # seasonality - frequency of the dataset, e.g. 12 for monthly
 # output_file_name - The prefix of error file names
 # address_near_zero_instability - whether the forecasts or actual values can have zeros or not
-calculate_errors <- function(forecasts, test_set, training_set, seasonality, output_file_name, address_near_zero_instability = FALSE){
+calculate_errors <- function(forecasts, test_set, training_set, seasonality, output_file_name){
   #calculating smape
-  smape_per_series <- calculate_smape(forecasts, test_set, address_near_zero_instability)
+  smape_per_series <- calculate_smape(forecasts, test_set)
   
   #calculating mase
   mase_per_series <- calculate_mase(forecasts, test_set, training_set, seasonality)
