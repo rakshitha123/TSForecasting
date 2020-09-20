@@ -45,10 +45,10 @@ get_arima_forecasts <- function(time_series, forecast_horizon, model = NULL){
   if(is.null(model)){
     tryCatch({
       fit <- forecast:::auto.arima(time_series, lambda = 0)
-    }, warning = function(e) {
+    }, error = function(e) {
         tryCatch({
           fit <<- forecast:::auto.arima(time_series)
-        }, warning = function(e){
+        }, error = function(e){
             fit <<- forecast:::auto.arima(time_series, seasonal = FALSE)
         })
     })
