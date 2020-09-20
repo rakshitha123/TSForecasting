@@ -67,9 +67,8 @@ find_train_test_lengths <- function(data, contain_equal_length = TRUE, split = T
 # input_file_name - name of the .ts file corresponding with the dataset
 # key - the name of the attribute that should be used as the key when creating the tsibble
 # index - the name of the time attribute that should be used as the index when creating the tsibble
-# address_near_zero_instability - whether the dataset contains zeros, this will be used when calculating smape of forecasts
 # integer_conversion - whether the forecasts should be rounded or not
-do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, key = NULL, index = NULL, address_near_zero_instability = FALSE, integer_conversion = FALSE){
+do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, key = NULL, index = NULL, integer_conversion = FALSE){
   
   print(paste0("Started ", dataset_name))
   
@@ -92,7 +91,7 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   
   all_serie_names <- unique(dataset$series_name)
   
-  train_matrix <- matrix(NA, nrow = length(all_serie_names), ncol = max_train_test_lengths[[1]])
+  train_list <- list()
   actual_matrix <- matrix(NA, nrow = length(all_serie_names), ncol = max_train_test_lengths[[2]])
   forecast_matrix <- matrix(NA, nrow = length(all_serie_names), ncol = max_train_test_lengths[[2]])
   
@@ -156,21 +155,18 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
     if(integer_conversion)
       series_forecasts <- round(series_forecasts)
     
-    write.table(t(c(all_serie_names[s], series_forecasts)), file.path(BASE_DIR, "results", "forecasts", output_file_name, fsep = "/"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE, append = TRUE)
+    write.table(t(c(all_serie_names[s], series_forecasts)), file.path(BASE_DIR, "results", "rolling_origin_forecasts", output_file_name, fsep = "/"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE, append = TRUE)
     
     train_series_data <- train_series_data[[VALUE_COL_NAME]][1:split]
     test_series_data <- test_series_data[[VALUE_COL_NAME]]
     
     if(!contain_equal_length){
-      remaining_train_length <- max_train_test_lengths[[1]] - length(train_series_data)
       remaining_test_length <- max_train_test_lengths[[2]] - length(test_series_data)
-      
-      train_series_data <- c(train_series_data, rep(NA, remaining_train_length))
       test_series_data <- c(test_series_data, rep(NA, remaining_test_length))
       series_forecasts <- c(series_forecasts, rep(NA, remaining_test_length))
     }
     
-    train_matrix[s,] <- train_series_data
+    train_list[[s]] <- train_series_data
     forecast_matrix[s,] <- series_forecasts
     actual_matrix[s,] <- test_series_data
   }
@@ -180,12 +176,12 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   print("Finished rolling origin")
   
   # Error calculations
-  calculate_errors(forecast_matrix, actual_matrix, train_matrix, seasonality, file.path(BASE_DIR, "results", "errors", paste0(dataset_name, "_", method), fsep = "/"), address_near_zero_instability)
+  calculate_errors(forecast_matrix, actual_matrix, train_list, seasonality, file.path(BASE_DIR, "results", "rolling_origin_errors", paste0(dataset_name, "_", method), fsep = "/"))
   
   # Execution time
   exec_time <- end_time - start_time
   print(exec_time)
-  write(paste(exec_time, attr(exec_time, "units")), file = file.path(BASE_DIR, "results", "execution_times", output_file_name, fsep = "/"), append = FALSE)
+  write(paste(exec_time, attr(exec_time, "units")), file = file.path(BASE_DIR, "results", "rolling_origin_execution_times", output_file_name, fsep = "/"), append = FALSE)
 }
 
 
