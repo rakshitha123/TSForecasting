@@ -47,20 +47,25 @@ TSFEATURE_NAMES <- c( "max_kl_shift",
 )
 
 
-# This function calculates tsfeatures and catch22 features
+# This function calculates tsfeatures, catch22 features and BoxCox lambda values
 # Parameters
 # dataset_name - the name of the dataset
 # input_file_name - name of the .ts file corresponding with the dataset
 # key - the name of the attribute that should be used as the key when creating the tsibble
 # index - the name of the time attribute that should be used as the index when creating the tsibble
-# feature_type  - tsfeatures or catch22
+# feature_type  - tsfeatures, catch22 or lambda
 calculate_features <- function(dataset_name, input_file_name, key = NULL, index = NULL, feature_type = "tsfeatures"){
   
   print(paste0("Started feature calculation: ", dataset_name))
   
-  output_file_name <- paste0(dataset_name, "_features.csv")
+  # Defining output file name
+  if(feature_type == "lambda")
+    output_file_name <- paste0(dataset_name, "_lambdas.csv")
+  else
+    output_file_name <- paste0(dataset_name, "_features.csv")
+    
   
-  # Loading data from the .ts file
+    # Loading data from the .ts file
   loaded_data <- convert_ts_to_tsibble(file.path(BASE_DIR, "ts_data", input_file_name, fsep = "/"), VALUE_COL_NAME, key, index)
   dataset <- loaded_data[[1]]
   frequency <- loaded_data[[2]]
@@ -155,15 +160,21 @@ calculate_features <- function(dataset_name, input_file_name, key = NULL, index 
       }
       
       all_features[i,] <- features$values 
+    }else{
+      if(i == 1) # Calculating BoxCox lambda values
+        lambdas <- forecast:::BoxCox.lambda(tslist[[i]])
+      else
+        lambdas <- c(lambdas, forecast:::BoxCox.lambda(tslist[[i]]))
     }
   }
   
   # Writing the calculated features into a file
-  if(feature_type == "tsfeatures"){
-      write.table(all_features, file.path(BASE_DIR, "results", "tsfeatures", output_file_name, fsep = "/"), row.names = FALSE, col.names = TRUE, sep = ",", quote = FALSE)
-  }else if(feature_type == "catch22"){
-      write.table(all_features, file.path(BASE_DIR, "results", "catch22_features", output_file_name, fsep = "/"), row.names = FALSE, col.names = TRUE, sep = ",", quote = FALSE)
-  }
+  if(feature_type == "tsfeatures")
+    write.table(all_features, file.path(BASE_DIR, "results", "tsfeatures", output_file_name, fsep = "/"), row.names = FALSE, col.names = TRUE, sep = ",", quote = FALSE)
+  else if(feature_type == "catch22")
+    write.table(all_features, file.path(BASE_DIR, "results", "catch22_features", output_file_name, fsep = "/"), row.names = FALSE, col.names = TRUE, sep = ",", quote = FALSE)
+  else
+    write.table(lambdas, file.path(BASE_DIR, "results", "lambdas", output_file_name, fsep = "/"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
 }
 
 
@@ -175,5 +186,7 @@ calculate_features("sample", "sample.ts", "series_name", "start_timestamp")
 # catch22 features
 calculate_features("sample", "sample.ts", "series_name", "start_timestamp", "catch22")
 
+# BoxCox lambdas
+calculate_features("sample", "sample.ts", "series_name", "start_timestamp", "lambdas")
 
 
