@@ -1,4 +1,4 @@
-BASE_DIR <- "TSForecasting" 
+BASE_DIR <- "TSForecasting"  
 
 source(file.path(BASE_DIR, "utils", "data_loader.R", fsep = "/"))
 source(file.path(BASE_DIR, "utils", "error_calculator.R", fsep = "/"))
@@ -157,7 +157,6 @@ do_fixed_horizon_forecating("nn5_daily", MODELS_HIGH_FREQ, "nn5_daily_dataset_wi
 do_fixed_horizon_forecating("tourism_yearly", MODELS_HIGH_FREQ, "tourism_yearly_dataset.ts", "series_name", "start_timestamp")
 do_fixed_horizon_forecating("tourism_quarterly", MODELS_HIGH_FREQ, "tourism_quarterly_dataset.ts", "series_name", "start_timestamp")
 do_fixed_horizon_forecating("tourism_monthly", MODELS_HIGH_FREQ, "tourism_monthly_dataset.ts", "series_name", "start_timestamp")
-do_fixed_horizon_forecating("rossmann", MODELS_HIGH_FREQ, "rossmann_dataset_without_missing_values.ts", "series_name", "start_timestamp", NULL, TRUE)
 do_fixed_horizon_forecating("m1_yearly", MODELS_HIGH_FREQ, "m1_yearly_dataset.ts", "series_name", "start_timestamp")
 do_fixed_horizon_forecating("m1_quarterly", MODELS_HIGH_FREQ, "m1_quarterly_dataset.ts", "series_name", "start_timestamp")
 do_fixed_horizon_forecating("m1_monthly", MODELS_HIGH_FREQ, "m1_monthly_dataset.ts", "series_name", "start_timestamp")
@@ -177,11 +176,9 @@ do_fixed_horizon_forecating("kaggle_web_traffic_daily", MODELS_HIGH_FREQ, "kaggl
 do_fixed_horizon_forecating("car_parts", MODELS_HIGH_FREQ, "car_parts_dataset_without_missing_values.ts", "series_name", "start_timestamp", 12, TRUE)
 do_fixed_horizon_forecating("hospital", MODELS_HIGH_FREQ, "hospital_dataset.ts", "series_name", "start_timestamp", 12, TRUE)
 do_fixed_horizon_forecating("fred_md", MODELS_HIGH_FREQ, "fred_md_dataset.ts", "series_name", "start_timestamp", 12)
-do_fixed_horizon_forecating("ausgrid_monthly", MODELS_HIGH_FREQ, "ausgrid_monthly_dataset.ts", "series_name", "start_timestamp", 12)
 
 # Weekly datasets - 5 - 8 weeks forecast horizon
 do_fixed_horizon_forecating("nn5_weekly", MODELS_LOW_FREQ, "nn5_weekly_dataset.ts", "series_name", "start_timestamp", 8)
-do_fixed_horizon_forecating("ausgrid_weekly", MODELS_LOW_FREQ, "ausgrid_weekly_dataset.ts", "series_name", "start_timestamp", 8)
 do_fixed_horizon_forecating("traffic_weekly", MODELS_LOW_FREQ, "traffic_weekly_dataset.ts", "series_name", "start_timestamp", 8)
 do_fixed_horizon_forecating("electricity_weekly", MODELS_LOW_FREQ, "electricity_weekly_dataset.ts", "series_name", "start_timestamp", 8, TRUE)
 do_fixed_horizon_forecating("solar_weekly", MODELS_LOW_FREQ, "solar_weekly_dataset.ts", "series_name", "start_timestamp", 5)
@@ -201,7 +198,6 @@ do_fixed_horizon_forecating("traffic_hourly", MODELS_LOW_FREQ, "traffic_hourly_d
 do_fixed_horizon_forecating("electricity_hourly", MODELS_LOW_FREQ, "electricity_hourly_dataset.ts", "series_name", "start_timestamp", 168, TRUE)
 do_fixed_horizon_forecating("solar_10_minutes", MODELS_LOW_FREQ, "solar_10_minutes_dataset.ts", "series_name", "start_timestamp", 1008)
 do_fixed_horizon_forecating("kdd_cup", MODELS_LOW_FREQ, "kdd_cup_2018_dataset_without_missing_values.ts", "series_name", "start_timestamp", 168)
-do_fixed_horizon_forecating("ausgrid_half_hourly", MODELS_LOW_FREQ, "ausgrid_half_hourly_dataset_without_missing_values.ts", "series_name", "start_timestamp", 336)
 do_fixed_horizon_forecating("melbourne_pedestrian_counts", MODELS_LOW_FREQ, "pedestrian_counts_dataset.ts", "series_name", "start_timestamp", 24, TRUE)
 
 
