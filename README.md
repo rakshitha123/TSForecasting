@@ -9,9 +9,9 @@ The fixed horizon, rolling origin and feature calculation related experiments ar
 
 | Sub-folder Name               | Stored Output                  | 
 |-------------------------------|:------------------------------:|
-| forecasts                     | rolling origin forecasts       |
-| errors                        | rolling origin errors          |
-| execution_times               | rolling origin execution times |
+| rolling_origin_forecasts      | rolling origin forecasts       |
+| rolling_origin_errors         | rolling origin errors          |
+| rolling_origin_execution_times| rolling origin execution times |
 | fixed_horizon_forecasts       | fixed horizon forecasts        |
 | fixed_horizon_errors          | fixed horizon errors           |
 | fixed_horizon_execution_times | fixed horizon execution times  |
@@ -26,7 +26,7 @@ When using this repository, please cite:
 ```{r} 
 @article{godahewa2020forecasting,
   title={Monash University, Time Series Forecasting Archive},
-  author={Godahewa, Rakshitha and Bergmeir, Christoph and Webb, Geoffrey I.},
+  author={Godahewa, Rakshitha and Bergmeir, Christoph and Webb, Geoffrey I. and Montero-Manso, Pablo},
   year={2020}
 }
 ```
