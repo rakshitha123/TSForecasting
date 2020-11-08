@@ -258,6 +258,7 @@ do_fixed_horizon_global_forecasting("sample", 10, "sample.ts", "series_name", "s
 
 # Competition datasets - the same horizons expected in the competitons are used
 # For global models, the lag is chosen as 500 for the datasets with long series. Otherwise, lag is chosen as (1.25 * forecast_horizon)
+# Only for M1 Quarterly dataset, the lag is chosen as (1.25 * seasonality) as the series are short
 
 do_fixed_horizon_local_forecasting("cif_2016", MODELS_HIGH_FREQ, "cif_2016_dataset.ts")
 do_fixed_horizon_local_forecasting("nn5_daily", MODELS_HIGH_FREQ, "nn5_daily_dataset_without_missing_values.ts", "series_name", "start_timestamp")
@@ -285,7 +286,7 @@ do_fixed_horizon_global_forecasting("tourism_yearly", 5, "tourism_yearly_dataset
 do_fixed_horizon_global_forecasting("tourism_quarterly", 10, "tourism_quarterly_dataset.ts", "series_name", "start_timestamp")
 do_fixed_horizon_global_forecasting("tourism_monthly", 30, "tourism_monthly_dataset.ts", "series_name", "start_timestamp")
 do_fixed_horizon_global_forecasting("m1_yearly", 8, "m1_yearly_dataset.ts", "series_name", "start_timestamp")
-do_fixed_horizon_global_forecasting("m1_quarterly", 10, "m1_quarterly_dataset.ts", "series_name", "start_timestamp")
+do_fixed_horizon_global_forecasting("m1_quarterly", 5, "m1_quarterly_dataset.ts", "series_name", "start_timestamp")
 do_fixed_horizon_global_forecasting("m1_monthly", 23, "m1_monthly_dataset.ts", "series_name", "start_timestamp")
 do_fixed_horizon_global_forecasting("m3_yearly", 8, "m3_yearly_dataset.ts", "series_name", "start_timestamp")
 do_fixed_horizon_global_forecasting("m3_quarterly", 10, "m3_quarterly_dataset.ts", "series_name", "start_timestamp")
