@@ -3,7 +3,7 @@ This repository contains the implementations related to the experiments of a set
 
 The benchmark datasets are available at: https://zenodo.org/communities/forecasting.
 
-All datasets contain univariate time series and they are availble in the sktime .ts format. The data can be loaded into the R environment in tsibble format [1] by following the example in "utils/data_loader.R". It uses a similar approach to the arff file loading method in R foreign package [2]. Download the .ts files as required from our Zenodo dataset repository and put them into "ts_data" folder.
+All datasets contain univariate time series and they are availble in a modified version of sktime .ts format. The data can be loaded into the R environment in tsibble format [1] by following the example in "utils/data_loader.R". It uses a similar approach to the arff file loading method in R foreign package [2]. The data can be loaded into the Python environment as a Pandas dataframe by following the example in "utils/data_loader.py". Download the .ts files as required from our Zenodo dataset repository and put them into "ts_data" folder.
 
 The fixed horizon, rolling origin and feature calculation related experiments are there in the "experiments" folder. Please create a folder named "results" in the parent level and sub-folders as necessary before running the experiments. The outputs of the experiments will be stored into the sub-folders within the "results" folder as mentioned follows:
 
