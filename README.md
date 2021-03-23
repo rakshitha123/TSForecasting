@@ -26,7 +26,7 @@ When using this repository, please cite:
 ```{r} 
 @article{godahewa2020forecasting,
   title={Monash University, Time Series Forecasting Archive},
-  author={Godahewa, Rakshitha and Bergmeir, Christoph and Webb, Geoffrey I. and Montero-Manso, Pablo},
+  author={Godahewa, Rakshitha and Bergmeir, Christoph and Webb, Geoffrey I. and Hyndman, Rob J. and Montero-Manso, Pablo},
   year={2020}
 }
 ```
