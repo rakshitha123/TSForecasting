@@ -63,9 +63,9 @@ calculate_features <- function(dataset_name, input_file_name, key = NULL, index 
     output_file_name <- paste0(dataset_name, "_lambdas.csv")
   else
     output_file_name <- paste0(dataset_name, "_features.csv")
-    
   
-    # Loading data from the .ts file
+  
+  # Loading data from the .ts file
   loaded_data <- convert_ts_to_tsibble(file.path(BASE_DIR, "ts_data", input_file_name, fsep = "/"), VALUE_COL_NAME, key, index)
   dataset <- loaded_data[[1]]
   frequency <- loaded_data[[2]]
@@ -178,6 +178,7 @@ calculate_features <- function(dataset_name, input_file_name, key = NULL, index 
 }
 
 
+
 # Example Usage
 
 # tsfeatures
@@ -188,5 +189,144 @@ calculate_features("sample", "sample.ts", "series_name", "start_timestamp", "cat
 
 # BoxCox lambdas
 calculate_features("sample", "sample.ts", "series_name", "start_timestamp", "lambdas")
+
+
+
+# Feature calculations
+# Download the .ts files from https://zenodo.org/communities/forecasting and put them into "ts_data" folder, before trying the following examples
+
+# tsfeatures
+calculate_features("nn5_daily", "nn5_daily_dataset_without_missing_values.ts", "series_name", "start_timestamp")
+calculate_features("m3_monthly", "m3_monthly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m1_monthly", "m1_monthly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("tourism_monthly", "tourism_monthly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("ausgrid_monthly", "ausgrid_monthly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("cif_2016", "cif_2016_dataset.ts")
+calculate_features("solar_weekly", "solar_weekly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("nn5_weekly", "nn5_weekly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("us_births", "us_births_dataset.ts", "series_name", "start_timestamp")
+calculate_features("saugeen_river_flow", "saugeenday_dataset.ts", "series_name", "start_timestamp")
+calculate_features("tourism_yearly", "tourism_yearly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("tourism_quarterly", "tourism_quarterly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("ausgrid_weekly", "ausgrid_weekly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("traffic_hourly", "traffic_hourly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("electricity_hourly", "electricity_hourly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("electricity_weekly", "electricity_weekly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("sunspot", "sunspot_dataset_without_missing_values.ts", "series_name", "start_timestamp")
+calculate_features("rossmann", "rossmann_dataset_without_missing_values.ts", "series_name", "start_timestamp")
+calculate_features("m1_yearly", "m1_yearly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m1_quarterly", "m1_quarterly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m3_yearly", "m3_yearly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m3_quarterly", "m3_quarterly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m3_other", "m3_other_dataset.ts")
+calculate_features("elecdemand", "elecdemand_dataset.ts", "series_name", "start_timestamp")
+calculate_features("traffic_weekly", "traffic_weekly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("solar_10_minutes", "solar_10_minutes_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m4_weekly", "m4_weekly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m4_hourly", "m4_hourly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("car_parts", "car_parts_dataset_without_missing_values.ts", "series_name", "start_timestamp")
+calculate_features("hospital", "hospital_dataset.ts", "series_name", "start_timestamp")
+calculate_features("covid_deaths", "covid_deaths_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m4_daily", "m4_daily_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m4_yearly", "m4_yearly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m4_quarterly", "m4_quarterly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("m4_monthly", "m4_monthly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("melbourne_pedestrian_counts", "pedestrian_counts_dataset.ts", "series_name", "start_timestamp")
+calculate_features("kdd_cup", "kdd_cup_2018_dataset_without_missing_values.ts", "series_name", "start_timestamp")
+calculate_features("ausgrid_half_hourly", "ausgrid_half_hourly_dataset_without_missing_values.ts", "series_name", "start_timestamp")
+calculate_features("fred_md", "fred_md_dataset.ts", "series_name", "start_timestamp")
+calculate_features("weather", "weather_dataset.ts")
+calculate_features("dominick", "dominick_dataset.ts")
+calculate_features("kaggle_web_traffic_weekly", "kaggle_web_traffic_weekly_dataset.ts", "series_name", "start_timestamp")
+calculate_features("kaggle_web_traffic_daily", "kaggle_web_traffic_dataset_without_missing_values.ts", "series_name", "start_timestamp")
+
+
+# Catch-22 Features
+calculate_features("nn5_daily", "nn5_daily_dataset_without_missing_values.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m3_monthly", "m3_monthly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m1_monthly", "m1_monthly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("tourism_monthly", "tourism_monthly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("cif_2016", "cif_2016_dataset.ts", NULL, NULL, "catch22")
+calculate_features("solar_weekly", "solar_weekly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("nn5_weekly", "nn5_weekly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("us_births", "us_births_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("saugeen_river_flow", "saugeenday_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("tourism_yearly", "tourism_yearly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("tourism_quarterly", "tourism_quarterly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("ausgrid_weekly", "ausgrid_weekly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("traffic_hourly", "traffic_hourly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("electricity_hourly", "electricity_hourly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("electricity_weekly", "electricity_weekly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("sunspot", "sunspot_dataset_without_missing_values.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("rossmann", "rossmann_dataset_without_missing_values.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m1_yearly", "m1_yearly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m1_quarterly", "m1_quarterly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m3_yearly", "m3_yearly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m3_quarterly", "m3_quarterly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m3_other", "m3_other_dataset.ts", NULL, NULL, "catch22")
+calculate_features("elecdemand", "elecdemand_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("traffic_weekly", "traffic_weekly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("solar_10_minutes", "solar_10_minutes_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m4_weekly", "m4_weekly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("car_parts", "car_parts_dataset_without_missing_values.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("hospital", "hospital_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("covid_deaths", "covid_deaths_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m4_hourly", "m4_hourly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m4_daily", "m4_daily_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m4_yearly", "m4_yearly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m4_quarterly", "m4_quarterly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("m4_monthly", "m4_monthly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("ausgrid_monthly", "ausgrid_monthly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("melbourne_pedestrian_counts", "pedestrian_counts_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("kdd_cup", "kdd_cup_2018_dataset_without_missing_values.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("ausgrid_half_hourly", "ausgrid_half_hourly_dataset_without_missing_values.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("kaggle_web_traffic_weekly", "kaggle_web_traffic_weekly_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("fred_md", "fred_md_dataset.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("kaggle_web_traffic_daily", "kaggle_web_traffic_dataset_without_missing_values.ts", "series_name", "start_timestamp", "catch22")
+calculate_features("weather", "weather_dataset.ts", NULL, NULL, "catch22")
+calculate_features("dominick", "dominick_dataset.ts", NULL, NULL, "catch22")
+
+
+# Boxcox Lambdas
+calculate_features("nn5_daily", "nn5_daily_dataset_without_missing_values.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m3_monthly", "m3_monthly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m1_monthly", "m1_monthly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("tourism_monthly", "tourism_monthly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("cif_2016", "cif_2016_dataset.ts", NULL, NULL, "lambda")
+calculate_features("solar_weekly", "solar_weekly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("nn5_weekly", "nn5_weekly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("us_births", "us_births_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("saugeen_river_flow", "saugeenday_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("tourism_yearly", "tourism_yearly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("tourism_quarterly", "tourism_quarterly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("traffic_hourly", "traffic_hourly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("electricity_hourly", "electricity_hourly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("electricity_weekly", "electricity_weekly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("sunspot", "sunspot_dataset_without_missing_values.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m1_yearly", "m1_yearly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m1_quarterly", "m1_quarterly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m3_yearly", "m3_yearly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m3_quarterly", "m3_quarterly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m3_other", "m3_other_dataset.ts", NULL, NULL, "lambda")
+calculate_features("elecdemand", "elecdemand_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("traffic_weekly", "traffic_weekly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("solar_10_minutes", "solar_10_minutes_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m4_weekly", "m4_weekly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m4_hourly", "m4_hourly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("car_parts", "car_parts_dataset_without_missing_values.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("hospital", "hospital_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("covid_deaths", "covid_deaths_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m4_daily", "m4_daily_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m4_yearly", "m4_yearly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m4_quarterly", "m4_quarterly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("m4_monthly", "m4_monthly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("melbourne_pedestrian_counts", "pedestrian_counts_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("kdd_cup", "kdd_cup_2018_dataset_without_missing_values.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("fred_md", "fred_md_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("weather", "weather_dataset.ts", NULL, NULL, "lambda")
+calculate_features("dominick", "dominick_dataset.ts", NULL, NULL, "lambda")
+calculate_features("kaggle_web_traffic_weekly", "kaggle_web_traffic_weekly_dataset.ts", "series_name", "start_timestamp", "lambda")
+calculate_features("kaggle_web_traffic_daily", "kaggle_web_traffic_dataset_without_missing_values.ts", "series_name", "start_timestamp", "lambda")
+
 
 
