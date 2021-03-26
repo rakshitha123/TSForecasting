@@ -25,13 +25,13 @@ When using this repository, please cite:
 
 ```{r} 
 @article{godahewa2020forecasting,
-  title={Monash University, Time Series Forecasting Archive},
-  author={Godahewa, Rakshitha and Bergmeir, Christoph and Webb, Geoffrey I. and Montero-Manso, Pablo},
+  title={Monash Time Series Forecasting Archive},
+  author={Godahewa, Rakshitha and Bergmeir, Christoph and Webb, Geoffrey I. and Hyndman, Rob J. and Montero-Manso, Pablo},
   year={2020}
 }
 ```
 
-## References
+# References
 [1] Wang, E., Cook, D., Hyndman, R. J. (2020). A new tidy data structure to support exploration and modeling of temporal data. Journal of Computational and Graphical Statistics. doi:10.1080/10618600.2019.1695624.
 
 [2] R Core Team (2018). foreign: Read Data Stored by 'Minitab', 'S', 'SAS', 'SPSS', 'Stata', 'Systat', 'Weka', 'dBase', .... R package version 0.8-71. https://CRAN.R-project.org/package=foreign
