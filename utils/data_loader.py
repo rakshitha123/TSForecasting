@@ -4,13 +4,13 @@ from numpy import distutils
 import distutils
 import pandas as pd
 
-# Converts the contents in a .ts file into a dataframe and returns it along with other meta-data of the dataset: frequency, horizon, whether the dataset contains missing values and whether the series have equal lengths
+# Converts the contents in a .tsf file into a dataframe and returns it along with other meta-data of the dataset: frequency, horizon, whether the dataset contains missing values and whether the series have equal lengths
 #
 # Parameters
-# full_file_path_and_name - complete .ts file path
+# full_file_path_and_name - complete .tsf file path
 # replace_missing_vals_with - a term to indicate the missing values in series in the returning dataframe
 # value_column_name - Any name that is preferred to have as the name of the column containing series values in the returning dataframe
-def convert_ts_to_dataframe(full_file_path_and_name, replace_missing_vals_with = 'NaN', value_column_name = "series_value"):
+def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with = 'NaN', value_column_name = "series_value"):
     col_names = []
     col_types = []
     all_data = {}
@@ -126,7 +126,7 @@ def convert_ts_to_dataframe(full_file_path_and_name, replace_missing_vals_with =
 
 
 # Example of usage
-loaded_data, frequency, forecast_horizon, contain_missing_values, contain_equal_length = convert_ts_to_dataframe("TSForecasting/ts-data/sample.ts")
+loaded_data, frequency, forecast_horizon, contain_missing_values, contain_equal_length = convert_tsf_to_dataframe("TSForecasting/tsf_data/sample.tsf")
 
 print(loaded_data)
 print(frequency)

@@ -17,14 +17,14 @@ for(f in seq_along(FREQUENCIES))
   FREQ_MAP[[FREQUENCIES[f]]] <- FREQ_VALS[f]
 
 
-# This function converts the contents in a .ts file into a tsibble or a dataframe and returns it along with other meta-data of the dataset: frequency, horizon, whether the dataset contains missing values and whether the series have equal lengths
+# This function converts the contents in a .tsf file into a tsibble or a dataframe and returns it along with other meta-data of the dataset: frequency, horizon, whether the dataset contains missing values and whether the series have equal lengths
 #
 # Parameters
-# file - .ts file path
+# file - .tsf file path
 # value_column_name - Any name that is preferred to have as the name of the column containing series values in the returning tsibble
 # key - The name of the attribute that should be used as the key when creating the tsibble. If doesn't provide, a data frame will be returned instead of a tsibble
-# index - The name of the time attribute that should be used as the index when creating the tsibble. If doesn't provide, a data frame will be returned instead of a tsibble
-convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", key = NULL, index = NULL){
+# index - The name of the time attribute that should be used as the index when creating the tsibble. If doesn't provide, it will search for a valid index. When no valid index found, a data frame will be returned instead of a tsibble
+convert_tsf_to_tsibble <-   function(file, value_column_name = "series_value", key = NULL, index = NULL){
     if(is.character(file)) {
       file <- file(file, "r")
       on.exit(close(file))
@@ -43,6 +43,7 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", ke
     forecast_horizon <- NULL
     contain_missing_values <- NULL
     contain_equal_length <- NULL
+    index_var <- NULL
 
     line <- readLines(file, n = 1) #n is no: of lines to read
 
@@ -58,6 +59,9 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", ke
           if(length(line) != 3)  #Attributes have both name and type
             stop("Invalid meta-data specification.")
 
+          if(is.null(index) & line[3] == "date")
+            index_var <- line[2]
+            
           col_names <- c(col_names, line[2])
           col_types <- c(col_types, line[3])
         }else{
@@ -158,11 +162,24 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", ke
 
     data[[value_column_name]] <- values
 
-    if(!(is.null(key) | is.null(index))){
-      if(!(key %in% col_names & index %in% col_names))
-        stop("Invalid key and index. Cannot convert the dataframe into tsibble format.")
-
-      data <- tsibble:::build_tsibble(x = data, key = key, index = index, ordered = F)
+    if(!(is.null(key))){
+      if(!(key %in% col_names))
+        stop("Invalid key. Cannot convert data into tsibble format.")
+      else{
+        if(is.null(index)){
+          if(is.null(index_var))
+            cat("Index is not provided. No valid index found in data. Returning a dataframe.")
+          else
+            data <- tsibble:::build_tsibble(x = data, key = key, index = index_var, ordered = F)
+        }else{
+          if(!(index %in% col_names))
+            stop("Invalid index Cannot convert data into tsibble format.")
+          else
+            data <- tsibble:::build_tsibble(x = data, key = key, index = index, ordered = F)
+        }
+      }
+    }else{
+      cat("Key is not provided. Returning a dataframe.")
     }
 
     list(data, frequency, forecast_horizon, contain_missing_values, contain_equal_length)
@@ -170,9 +187,11 @@ convert_ts_to_tsibble <-   function(file, value_column_name = "series_value", ke
 
 
 # Example of usage
-# loaded_data <- convert_ts_to_tsibble(file.path("TSForecasting", "ts_data", "sample.ts", fsep = "/"), "series_value", "series_name", "start_timestamp")
+# loaded_data <- convert_tsf_to_tsibble(file.path("TSForecasting", "tsf_data", "sample.tsf", fsep = "/"), "series_value", "series_name", "start_timestamp")
 # tsibble_data <- loaded_data[[1]]
 # frequency <- loaded_data[[2]]
 # forecast_horizon <- loaded_data[[3]]
 # contain_missing_values <- loaded_data[[4]]
 # contain_equal_length <- loaded_data[[5]]
+
+

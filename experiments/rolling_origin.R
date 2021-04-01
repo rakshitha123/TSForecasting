@@ -4,7 +4,7 @@ source(file.path(BASE_DIR, "utils", "data_loader.R", fsep = "/"))
 source(file.path(BASE_DIR, "utils", "error_calculator.R", fsep = "/"))
 source(file.path(BASE_DIR, "models", "local_univariate_models.R", fsep = "/"))
 
-# The name of the column containing time series values after loading data from the .ts file into a tsibble
+# The name of the column containing time series values after loading data from the .tsf file into a tsibble
 VALUE_COL_NAME <- "series_value"
 
 # The train-test split use for rolling origin evaluation. By default, it uses 80% of data for training (denoted by 0.8) and 20% of data for testing
@@ -64,7 +64,7 @@ find_train_test_lengths <- function(data, contain_equal_length = TRUE, split = T
 # method - the name of the forecasting method that should be used for rolling origin evaluation
 #         current supporting forecasting methods are ets, theta, simple exponential smoothing, tbats, auto.arima and dynamic harmonic regression arima
 #         you can also define new forecasting methods (probably in models/local_univariate_models.R) and link them within the function  
-# input_file_name - name of the .ts file corresponding with the dataset
+# input_file_name - name of the .tsf file corresponding with the dataset
 # key - the name of the attribute that should be used as the key when creating the tsibble
 # index - the name of the time attribute that should be used as the index when creating the tsibble
 # integer_conversion - whether the forecasts should be rounded or not
@@ -74,8 +74,8 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   
   output_file_name <- paste0(dataset_name, "_", method, ".txt")
   
-  # Loading data from the .ts file
-  loaded_data <- convert_ts_to_tsibble(file.path(BASE_DIR, "ts_data", input_file_name, fsep = "/"), VALUE_COL_NAME, key, index)
+  # Loading data from the .tsf file
+  loaded_data <- convert_tsf_to_tsibble(file.path(BASE_DIR, "tsf_data", input_file_name, fsep = "/"), VALUE_COL_NAME, key, index)
   dataset <- loaded_data[[1]]
   frequency <- loaded_data[[2]]
   contain_equal_length <- loaded_data[[5]]
@@ -186,7 +186,9 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
 
 
 # Example of usage
-do_rolling_origin_forecating("sample", "theta", "sample.ts", "series_name", "start_timestamp")
-do_rolling_origin_forecating("sample", "ses", "sample.ts", "series_name", "start_timestamp")
-do_rolling_origin_forecating("sample", "tbats", "sample.ts", "series_name", "start_timestamp")
-do_rolling_origin_forecating("sample", "dhr_arima", "sample.ts", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "theta", "sample.tsf", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "ses", "sample.tsf", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "tbats", "sample.tsf", "series_name", "start_timestamp")
+do_rolling_origin_forecating("sample", "dhr_arima", "sample.tsf", "series_name", "start_timestamp")
+
+
