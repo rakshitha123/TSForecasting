@@ -1,4 +1,4 @@
-from sktime.utils.load_data import TsFileParseException
+from sktime.utils.data_io import TsFileParseException
 from datetime import datetime
 from numpy import distutils
 import distutils
