@@ -2,8 +2,8 @@ options(pillar.sigfig = 7)
 
 
 # Extend these frequency lists as required
-LOW_FREQUENCIES <- c("4_seconds", "minutely", "10_minutes", "half_hourly", "hourly")
-LOW_FREQ_VALS <- c("4 sec", "1 min", "10 min", "30 min", "1 hour")
+LOW_FREQUENCIES <- c("4_seconds", "minutely", "10_minutes", "15_minutes", "half_hourly", "hourly")
+LOW_FREQ_VALS <- c("4 sec", "1 min", "10 min", "15 min", "30 min", "1 hour")
 HIGH_FREQUENCIES <- c("daily", "weekly", "monthly", "quarterly", "yearly")
 HIGH_FREQ_VALS <- c("1 day", "1 week", "1 month", "3 months", "1 year")
 FREQUENCIES <- c(LOW_FREQUENCIES, HIGH_FREQUENCIES)
@@ -104,9 +104,11 @@ convert_tsf_to_tsibble <-   function(file, value_column_name = "series_value", k
       if(length(full_info) != length(col_names)+1)
         stop("Missing attributes/values in series.")
 
-      series <- as.numeric(strsplit(tail(full_info, 1), ",")[[1]])
-
-      if(sum(is.na(series)) == length(series))
+      series <- strsplit(tail(full_info, 1), ",")[[1]]
+      series[which(series == "?")] <- NA
+      series <- as.numeric(series)
+      
+      if(all(is.na(series)))
         stop("All series values are missing. A given series should contains a set of comma separated numeric values. At least one numeric value should be there in a series.")
 
       values <- c(values, series)
