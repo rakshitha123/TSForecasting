@@ -23,7 +23,7 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
     found_data_section = False
     started_reading_data_section = False
 
-    with open(full_file_path_and_name, 'r', encoding='utf-8') as file:
+    with open(full_file_path_and_name, 'r', encoding='cp1252') as file:
         for line in file:
             # Strip white space from start/end of line
             line = line.strip()
