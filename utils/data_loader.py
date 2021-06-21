@@ -1,4 +1,3 @@
-from sktime.utils.data_io import TsFileParseException
 from datetime import datetime
 from numpy import distutils
 import distutils
@@ -34,13 +33,13 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
                         line_content = line.split(" ")
                         if line.startswith("@attribute"):
                             if (len(line_content) != 3):  # Attributes have both name and type
-                                raise TsFileParseException("Invalid meta-data specification.")
+                                raise Exception("Invalid meta-data specification.")
 
                             col_names.append(line_content[1])
                             col_types.append(line_content[2])
                         else:
                             if len(line_content) != 2:  # Other meta-data have only values
-                                raise TsFileParseException("Invalid meta-data specification.")
+                                raise Exception("Invalid meta-data specification.")
 
                             if line.startswith("@frequency"):
                                 frequency = line_content[1]
@@ -53,14 +52,14 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
 
                     else:
                         if len(col_names) == 0:
-                            raise TsFileParseException("Missing attribute section. Attribute section must come before data.")
+                            raise Exception("Missing attribute section. Attribute section must come before data.")
 
                         found_data_tag = True
                 elif not line.startswith("#"):
                     if len(col_names) == 0:
-                        raise TsFileParseException("Missing attribute section. Attribute section must come before data.")
+                        raise Exception("Missing attribute section. Attribute section must come before data.")
                     elif not found_data_tag:
-                        raise TsFileParseException("Missing @data tag.")
+                        raise Exception("Missing @data tag.")
                     else:
                         if not started_reading_data_section:
                             started_reading_data_section = True
@@ -73,13 +72,13 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
                         full_info = line.split(":")
 
                         if len(full_info) != (len(col_names) + 1):
-                            raise TsFileParseException("Missing attributes/values in series.")
+                            raise Exception("Missing attributes/values in series.")
 
                         series = full_info[len(full_info) - 1]
                         series = series.split(",")
 
                         if(len(series) == 0):
-                            raise TsFileParseException("A given series should contains a set of comma separated numeric values. At least one numeric value should be there in a series. Missing values should be indicated with ? symbol")
+                            raise Exception("A given series should contains a set of comma separated numeric values. At least one numeric value should be there in a series. Missing values should be indicated with ? symbol")
 
                         numeric_series = []
 
@@ -90,7 +89,7 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
                                 numeric_series.append(float(val))
 
                         if (numeric_series.count(replace_missing_vals_with) == len(numeric_series)):
-                            raise TsFileParseException("All series values are missing. A given series should contains a set of comma separated numeric values. At least one numeric value should be there in a series.")
+                            raise Exception("All series values are missing. A given series should contains a set of comma separated numeric values. At least one numeric value should be there in a series.")
 
                         all_series.append(pd.Series(numeric_series).array)
 
@@ -103,21 +102,21 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
                             elif col_types[i] == "date":
                                 att_val = datetime.strptime(full_info[i], '%Y-%m-%d %H-%M-%S')
                             else:
-                                raise TsFileParseException("Invalid attribute type.") # Currently, the code supports only numeric, string and date types. Extend this as required.
+                                raise Exception("Invalid attribute type.") # Currently, the code supports only numeric, string and date types. Extend this as required.
 
                             if(att_val == None):
-                                raise TsFileParseException("Invalid attribute value.")
+                                raise Exception("Invalid attribute value.")
                             else:
                                 all_data[col_names[i]].append(att_val)
 
                 line_count = line_count + 1
 
         if line_count == 0:
-            raise TsFileParseException("Empty file.")
+            raise Exception("Empty file.")
         if len(col_names) == 0:
-            raise TsFileParseException("Missing attribute section.")
+            raise Exception("Missing attribute section.")
         if not found_data_section:
-            raise TsFileParseException("Missing series information under data section.")
+            raise Exception("Missing series information under data section.")
 
         all_data[value_column_name] = all_series
         loaded_data = pd.DataFrame(all_data)
