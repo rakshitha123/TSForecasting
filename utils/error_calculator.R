@@ -1,6 +1,6 @@
 library(smooth)
 
-# Functions to calculate smape, mase, mae and rmse
+# Functions to calculate smape, msmape, mase, mae and rmse
 
 
 # Function to calculate series wise smape values
@@ -10,13 +10,26 @@ library(smooth)
 #             no: of rows should be equal to number of series and no: of columns should be equal to the forecast horizon 
 # test_set - a matrix with the same dimensions as 'forecasts' containing the actual values corresponding with them
 calculate_smape <- function(forecasts, test_set){
+  smape <- 2 * abs(forecasts - test_set) / (abs(forecasts) + abs(test_set))
+  smape_per_series <- rowMeans(smape, na.rm = TRUE)
+  smape_per_series
+}
+
+
+# Function to calculate series wise smape values
+#
+# Parameters
+# forecasts - a matrix containing forecasts for a set of series
+#             no: of rows should be equal to number of series and no: of columns should be equal to the forecast horizon 
+# test_set - a matrix with the same dimensions as 'forecasts' containing the actual values corresponding with them
+calculate_msmape <- function(forecasts, test_set){
   epsilon <- 0.1
   sum <- NULL
   comparator <- matrix((0.5 + epsilon), nrow = nrow(test_set), ncol = ncol(test_set))
   sum <- pmax(comparator, (abs(forecasts) + abs(test_set) + epsilon))
   smape <- 2 * abs(forecasts - test_set) / (sum)
-  smape_per_series <- rowMeans(smape, na.rm = TRUE)
-  smape_per_series
+  msmape_per_series <- rowMeans(smape, na.rm = TRUE)
+  msmape_per_series
 }
 
 
@@ -94,6 +107,9 @@ calculate_errors <- function(forecasts, test_set, training_set, seasonality, out
   #calculating smape
   smape_per_series <- calculate_smape(forecasts, test_set)
   
+  #calculating msmape
+  msmape_per_series <- calculate_msmape(forecasts, test_set)
+  
   #calculating mase
   mase_per_series <- calculate_mase(forecasts, test_set, training_set, seasonality)
   
@@ -105,6 +121,8 @@ calculate_errors <- function(forecasts, test_set, training_set, seasonality, out
   
   mean_smape <- paste0("Mean SMAPE: ", mean(smape_per_series))
   median_smape <- paste0("Median SMAPE: ", median(smape_per_series))
+  mean_msmape <- paste0("Mean mSMAPE: ", mean(msmape_per_series))
+  median_msmape <- paste0("Median mSMAPE: ", median(msmape_per_series))
   mean_mase <- paste0("Mean MASE: ", mean(mase_per_series))
   median_mase <- paste0("Median MASE: ", median(mase_per_series))
   mean_mae <- paste0("Mean MAE: ", mean(mae_per_series))
@@ -114,6 +132,8 @@ calculate_errors <- function(forecasts, test_set, training_set, seasonality, out
   
   print(mean_smape)
   print(median_smape)
+  print(mean_msmape)
+  print(median_msmape)
   print(mean_mase)
   print(median_mase)
   print(mean_mae)
@@ -123,8 +143,9 @@ calculate_errors <- function(forecasts, test_set, training_set, seasonality, out
   
   #writing error measures into files
   write.table(smape_per_series, paste0(output_file_name, "_smape.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
+  write.table(msmape_per_series, paste0(output_file_name, "_msmape.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
   write.table(mase_per_series, paste0(output_file_name, "_mase.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
   write.table(mae_per_series, paste0(output_file_name, "_mae.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
   write.table(rmse_per_series, paste0(output_file_name, "_rmse.txt"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
-  write(c(mean_smape, median_smape, mean_mase, median_mase, mean_mae, median_mae, mean_rmse, median_rmse, "\n"), file = paste0(output_file_name, ".txt"), append = FALSE)
+  write(c(mean_smape, median_smape, mean_msmape, median_msmape, mean_mase, median_mase, mean_mae, median_mae, mean_rmse, median_rmse, "\n"), file = paste0(output_file_name, ".txt"), append = FALSE)
 }

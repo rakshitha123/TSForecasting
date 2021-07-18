@@ -9,10 +9,13 @@ create_input_matrix <- function(dataset, lag){
     time_series <- as.numeric(dataset[[i]])
     
     mean <- mean(time_series)
-    series_means <- c(series_means, mean)
     
     # Mean normalisation
+    if(mean == 0)
+      mean <- 1 # Avoid division by zero
+    
     time_series <- time_series / mean
+    series_means <- c(series_means, mean)
     
     # Embed the series
     embedded <- embed(time_series, lag + 1)

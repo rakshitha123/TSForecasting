@@ -125,10 +125,10 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
 
 
 # Example of usage
-loaded_data, frequency, forecast_horizon, contain_missing_values, contain_equal_length = convert_tsf_to_dataframe("TSForecasting/tsf_data/sample.tsf")
+# loaded_data, frequency, forecast_horizon, contain_missing_values, contain_equal_length = convert_tsf_to_dataframe("TSForecasting/tsf_data/sample.tsf")
 
-print(loaded_data)
-print(frequency)
-print(forecast_horizon)
-print(contain_missing_values)
-print(contain_equal_length)
+# print(loaded_data)
+# print(frequency)
+# print(forecast_horizon)
+# print(contain_missing_values)
+# print(contain_equal_length)
