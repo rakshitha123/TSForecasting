@@ -122,7 +122,7 @@ def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_f
     elif(method == "deepar"):
         estimator = DeepAREstimator(freq=freq,
                                     context_length=lag,
-                                    prediction_length=forecast_horizon)  
+                                    prediction_length=forecast_horizon)
     elif(method =="nbeats"):
         estimator = NBEATSEstimator(freq=freq,
                                     context_length=lag,
@@ -134,7 +134,7 @@ def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_f
         estimator = TransformerEstimator(freq=freq,
                                      context_length=lag,
                                      prediction_length=forecast_horizon)
-   
+
     predictor = estimator.train(training_data=train_ds)
 
     forecast_it, ts_it = make_evaluation_predictions(dataset=test_ds, predictor=predictor, num_samples=100)
@@ -149,6 +149,9 @@ def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_f
     if integer_conversion:
         final_forecasts = np.round(final_forecasts)
 
+    if not os.path.exists(BASE_DIR + "/results/fixed_horizon_forecasts/"):
+        os.makedirs(BASE_DIR + "/results/fixed_horizon_forecasts/")
+
     # write the forecasting results to a file
     file_name = dataset_name + "_" + method + "_lag_" + str(lag)
     forecast_file_path = BASE_DIR + "/results/fixed_horizon_forecasts/" + file_name + ".txt"
@@ -162,6 +165,9 @@ def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_f
     # Execution time
     exec_time = finish_exec_time - start_exec_time
     print(exec_time)
+
+    if not os.path.exists(BASE_DIR + "/results/fixed_horizon_execution_times/"):
+        os.makedirs(BASE_DIR + "/results/fixed_horizon_execution_times/")
 
     with open(BASE_DIR + "/results/fixed_horizon_execution_times/" + file_name + ".txt", "w") as output_time:
         output_time.write(str(exec_time))
@@ -178,6 +184,9 @@ def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_f
     with open(temp_results_path, "w") as output_results:
         writer = csv.writer(output_results, lineterminator='\n')
         writer.writerows(test_series_list)
+
+    if not os.path.exists(BASE_DIR + "/results/fixed_horizon_errors/"):
+        os.makedirs(BASE_DIR + "/results/fixed_horizon_errors/")
 
     subprocess.call(["Rscript", "--vanilla", BASE_DIR + "/utils/error_calc_helper.R", BASE_DIR, forecast_file_path, temp_results_path, temp_dataset_path, str(seasonality), file_name ])
 
@@ -391,17 +400,3 @@ get_deep_nn_forecasts("electricity_hourly", 30, "electricity_hourly_dataset.tsf"
 get_deep_nn_forecasts("solar_10_minutes", 50, "solar_10_minutes_dataset.tsf", "nbeats", 1008)
 get_deep_nn_forecasts("kdd_cup", 210, "kdd_cup_2018_dataset_without_missing_values.tsf", "nbeats", 168)
 get_deep_nn_forecasts("melbourne_pedestrian_counts", 210, "pedestrian_counts_dataset.tsf", "nbeats", 24, True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
