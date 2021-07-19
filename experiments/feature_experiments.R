@@ -1,5 +1,5 @@
 library(tidyverse)
-library(catch22)
+library(Rcatch22)
 
 BASE_DIR <- "TSForecasting"
 
@@ -8,19 +8,20 @@ source(file.path(BASE_DIR, "utils", "data_loader.R", fsep = "/"))
 # The name of the column containing time series values after loading data from the .tsf file into a tsibble
 VALUE_COL_NAME <- "series_value"
 
-# seasonality values corresponding with the frequencies: 4_seconds, minutely, 10_minutes, half_hourly, hourly, daily, weekly, monthly, quarterly and yearly
-# consider multiple seasonalities for frequencies less than daily
+# Seasonality values corresponding with the frequencies: 4_seconds, minutely, 10_minutes, 15_minutes, half_hourly, hourly, daily, weekly, monthly, quarterly and yearly
+# Consider multiple seasonalities for frequencies less than daily
 SEASONALITY_VALS <- list()
 SEASONALITY_VALS[[1]] <- c(21600, 151200, 7889400)
 SEASONALITY_VALS[[2]] <- c(1440, 10080, 525960)
 SEASONALITY_VALS[[3]] <- c(144, 1008, 52596)
-SEASONALITY_VALS[[4]] <- c(48, 336, 17532)
-SEASONALITY_VALS[[5]] <- c(24, 168, 8766)
-SEASONALITY_VALS[[6]] <- 7
-SEASONALITY_VALS[[7]] <- 365.25/7
-SEASONALITY_VALS[[8]] <- 12 
-SEASONALITY_VALS[[9]] <- 4
-SEASONALITY_VALS[[10]] <- 1  
+SEASONALITY_VALS[[4]] <- c(96, 672, 35064)
+SEASONALITY_VALS[[5]] <- c(48, 336, 17532)
+SEASONALITY_VALS[[6]] <- c(24, 168, 8766)
+SEASONALITY_VALS[[7]] <- 7
+SEASONALITY_VALS[[8]] <- 365.25/7
+SEASONALITY_VALS[[9]] <- 12 
+SEASONALITY_VALS[[10]] <- 4
+SEASONALITY_VALS[[11]] <- 1  
 
 SEASONALITY_MAP <- list()
 
@@ -169,12 +170,16 @@ calculate_features <- function(dataset_name, input_file_name, key = NULL, index 
   }
   
   # Writing the calculated features into a file
-  if(feature_type == "tsfeatures")
+  if(feature_type == "tsfeatures"){
+    dir.create(file.path(BASE_DIR, "results", "tsfeatures", fsep = "/"), showWarnings = FALSE)
     write.table(all_features, file.path(BASE_DIR, "results", "tsfeatures", output_file_name, fsep = "/"), row.names = FALSE, col.names = TRUE, sep = ",", quote = FALSE)
-  else if(feature_type == "catch22")
+  }else if(feature_type == "catch22"){
+    dir.create(file.path(BASE_DIR, "results", "catch22_features", fsep = "/"), showWarnings = FALSE)
     write.table(all_features, file.path(BASE_DIR, "results", "catch22_features", output_file_name, fsep = "/"), row.names = FALSE, col.names = TRUE, sep = ",", quote = FALSE)
-  else
+  }else{
+    dir.create(file.path(BASE_DIR, "results", "lambdas", fsep = "/"), showWarnings = FALSE)
     write.table(lambdas, file.path(BASE_DIR, "results", "lambdas", output_file_name, fsep = "/"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
+  }
 }
 
 

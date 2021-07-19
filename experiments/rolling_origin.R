@@ -13,19 +13,20 @@ TRAIN_SPLIT <- 0.8
 # The number of forecasts provided in one iteration while performing the rolling origin evaluation
 ROLLING_ORIGIN_FORECAST_HORIZON <- 1
 
-# seasonality values corresponding with the frequencies: 4_seconds, minutely, 10_minutes, half_hourly, hourly, daily, weekly, monthly, quarterly and yearly
-# consider multiple seasonalities for frequencies less than daily
+# Seasonality values corresponding with the frequencies: 4_seconds, minutely, 10_minutes, 15_minutes, half_hourly, hourly, daily, weekly, monthly, quarterly and yearly
+# Consider multiple seasonalities for frequencies less than daily
 SEASONALITY_VALS <- list()
 SEASONALITY_VALS[[1]] <- c(21600, 151200, 7889400)
 SEASONALITY_VALS[[2]] <- c(1440, 10080, 525960)
 SEASONALITY_VALS[[3]] <- c(144, 1008, 52596)
-SEASONALITY_VALS[[4]] <- c(48, 336, 17532)
-SEASONALITY_VALS[[5]] <- c(24, 168, 8766)
-SEASONALITY_VALS[[6]] <- 7
-SEASONALITY_VALS[[7]] <- 365.25/7
-SEASONALITY_VALS[[8]] <- 12 
-SEASONALITY_VALS[[9]] <- 4
-SEASONALITY_VALS[[10]] <- 1  
+SEASONALITY_VALS[[4]] <- c(96, 672, 35064)
+SEASONALITY_VALS[[5]] <- c(48, 336, 17532)
+SEASONALITY_VALS[[6]] <- c(24, 168, 8766)
+SEASONALITY_VALS[[7]] <- 7
+SEASONALITY_VALS[[8]] <- 365.25/7
+SEASONALITY_VALS[[9]] <- 12 
+SEASONALITY_VALS[[10]] <- 4
+SEASONALITY_VALS[[11]] <- 1  
 
 SEASONALITY_MAP <- list()
 
@@ -98,6 +99,8 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   start_time <- Sys.time()
   
   print("started Rolling Origin")
+  
+  dir.create(file.path(BASE_DIR, "results", "rolling_origin_forecasts", fsep = "/"), showWarnings = FALSE)
   
   for(s in seq_along(all_serie_names)){
     series_data <- dataset[dataset$series_name == as.character(all_serie_names[s]), ]
@@ -176,11 +179,13 @@ do_rolling_origin_forecating <- function(dataset_name, method, input_file_name, 
   print("Finished rolling origin")
   
   # Error calculations
+  dir.create(file.path(BASE_DIR, "results", "rolling_origin_errors", fsep = "/"), showWarnings = FALSE)
   calculate_errors(forecast_matrix, actual_matrix, train_list, seasonality, file.path(BASE_DIR, "results", "rolling_origin_errors", paste0(dataset_name, "_", method), fsep = "/"))
   
   # Execution time
   exec_time <- end_time - start_time
   print(exec_time)
+  dir.create(file.path(BASE_DIR, "results", "rolling_origin_execution_times", fsep = "/"), showWarnings = FALSE)
   write(paste(exec_time, attr(exec_time, "units")), file = file.path(BASE_DIR, "results", "rolling_origin_execution_times", output_file_name, fsep = "/"), append = FALSE)
 }
 
@@ -190,5 +195,3 @@ do_rolling_origin_forecating("sample", "theta", "sample.tsf", "series_name", "st
 do_rolling_origin_forecating("sample", "ses", "sample.tsf", "series_name", "start_timestamp")
 do_rolling_origin_forecating("sample", "tbats", "sample.tsf", "series_name", "start_timestamp")
 do_rolling_origin_forecating("sample", "dhr_arima", "sample.tsf", "series_name", "start_timestamp")
-
-

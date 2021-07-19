@@ -86,6 +86,8 @@ do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file
   
   print("started Forecasting")
   
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", fsep = "/"), showWarnings = FALSE)
+  
   for(s in seq_along(all_serie_names)){
     print(s)
     
@@ -137,9 +139,12 @@ do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file
   # Execution time
   exec_time <- end_time - start_time
   print(exec_time)
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_execution_times", fsep = "/"), showWarnings = FALSE)
   write(paste(exec_time, attr(exec_time, "units")), file = file.path(BASE_DIR, "results", "fixed_horizon_execution_times", paste0(dataset_name, ".txt"), fsep = "/"), append = FALSE)
   
   # Error calculations
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_errors", fsep = "/"), showWarnings = FALSE)
+  
   for(method in methods){
     forecast_matrix <- read.csv(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt"), fsep = "/"), header = F)
     forecast_matrix <- as.matrix(forecast_matrix[-1])
@@ -224,6 +229,8 @@ do_fixed_horizon_global_forecasting <- function(dataset_name, lag, input_file_na
   if(integer_conversion)
     forecast_matrix <- round(forecast_matrix)
   
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", fsep = "/"), showWarnings = FALSE)
+  
   for(s in seq_along(all_serie_names)){
     actual_series <- as.numeric(actual_matrix[s,])
     diff <- sum(is.na(actual_series))
@@ -241,9 +248,11 @@ do_fixed_horizon_global_forecasting <- function(dataset_name, lag, input_file_na
   # Execution time
   exec_time <- end_time - start_time
   print(exec_time)
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_execution_times", fsep = "/"), showWarnings = FALSE)
   write(paste(exec_time, attr(exec_time, "units")), file = file.path(BASE_DIR, "results", "fixed_horizon_execution_times", paste0(dataset_name, "_", method, "_lag_", lag, ".txt"), fsep = "/"), append = FALSE)
   
   # Error calculations
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_errors", fsep = "/"), showWarnings = FALSE)
   forecast_matrix <- as.matrix(forecast_matrix)
   calculate_errors(forecast_matrix, actual_matrix, train_series_list, seasonality, file.path(BASE_DIR, "results", "fixed_horizon_errors", paste0(dataset_name, "_", method, "_lag_", lag), fsep = "/"))
 }
