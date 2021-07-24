@@ -244,7 +244,11 @@ calculate_features("weather", "weather_dataset.tsf")
 calculate_features("dominick", "dominick_dataset.tsf")
 calculate_features("kaggle_web_traffic_weekly", "kaggle_web_traffic_weekly_dataset.tsf", "series_name", "start_timestamp")
 calculate_features("kaggle_web_traffic_daily", "kaggle_web_traffic_dataset_without_missing_values.tsf", "series_name", "start_timestamp")
-
+calculate_features("temperature_rain", "temperature_rain_dataset_without_missing_values.tsf", "series_name", "start_timestamp")
+calculate_features("bitcoin", "bitcoin_dataset_without_missing_values.tsf", "series_name", "start_timestamp")
+calculate_features("aus_elecdemand", "australian_electricity_demand_dataset.tsf", "series_name", "start_timestamp")
+calculate_features("rideshare", "rideshare_dataset_without_missing_values.tsf", "series_name", "start_timestamp")
+calculate_features("vehicle_trips", "vehicle_trips_dataset_without_missing_values.tsf", "series_name", "start_timestamp")
 
 # Catch-22 Features
 calculate_features("nn5_daily", "nn5_daily_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "catch22")
@@ -290,6 +294,11 @@ calculate_features("fred_md", "fred_md_dataset.tsf", "series_name", "start_times
 calculate_features("kaggle_web_traffic_daily", "kaggle_web_traffic_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "catch22")
 calculate_features("weather", "weather_dataset.tsf", NULL, NULL, "catch22")
 calculate_features("dominick", "dominick_dataset.tsf", NULL, NULL, "catch22")
+calculate_features("temperature_rain", "temperature_rain_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "catch22")
+calculate_features("bitcoin", "bitcoin_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "catch22")
+calculate_features("aus_elecdemand", "australian_electricity_demand_dataset.tsf", "series_name", "start_timestamp", "catch22")
+calculate_features("rideshare", "rideshare_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "catch22")
+calculate_features("vehicle_trips", "vehicle_trips_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "catch22")
 
 
 # Boxcox Lambdas
@@ -332,6 +341,10 @@ calculate_features("weather", "weather_dataset.tsf", NULL, NULL, "lambda")
 calculate_features("dominick", "dominick_dataset.tsf", NULL, NULL, "lambda")
 calculate_features("kaggle_web_traffic_weekly", "kaggle_web_traffic_weekly_dataset.tsf", "series_name", "start_timestamp", "lambda")
 calculate_features("kaggle_web_traffic_daily", "kaggle_web_traffic_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "lambda")
-
+calculate_features("temperature_rain", "temperature_rain_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "lambda")
+calculate_features("bitcoin", "bitcoin_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "lambda")
+calculate_features("aus_elecdemand", "australian_electricity_demand_dataset.tsf", "series_name", "start_timestamp", "lambda")
+calculate_features("rideshare", "rideshare_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "lambda")
+calculate_features("vehicle_trips", "vehicle_trips_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "lambda")
 
 
