@@ -122,7 +122,7 @@ def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_f
     elif(method == "deepar"):
         estimator = DeepAREstimator(freq=freq,
                                     context_length=lag,
-                                    prediction_length=forecast_horizon)  
+                                    prediction_length=forecast_horizon)
     elif(method =="nbeats"):
         estimator = NBEATSEstimator(freq=freq,
                                     context_length=lag,
@@ -134,7 +134,7 @@ def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_f
         estimator = TransformerEstimator(freq=freq,
                                      context_length=lag,
                                      prediction_length=forecast_horizon)
-   
+
     predictor = estimator.train(training_data=train_ds)
 
     forecast_it, ts_it = make_evaluation_predictions(dataset=test_ds, predictor=predictor, num_samples=100)
@@ -149,6 +149,9 @@ def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_f
     if integer_conversion:
         final_forecasts = np.round(final_forecasts)
 
+    if not os.path.exists(BASE_DIR + "/results/fixed_horizon_forecasts/"):
+        os.makedirs(BASE_DIR + "/results/fixed_horizon_forecasts/")
+
     # write the forecasting results to a file
     file_name = dataset_name + "_" + method + "_lag_" + str(lag)
     forecast_file_path = BASE_DIR + "/results/fixed_horizon_forecasts/" + file_name + ".txt"
@@ -162,6 +165,9 @@ def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_f
     # Execution time
     exec_time = finish_exec_time - start_exec_time
     print(exec_time)
+
+    if not os.path.exists(BASE_DIR + "/results/fixed_horizon_execution_times/"):
+        os.makedirs(BASE_DIR + "/results/fixed_horizon_execution_times/")
 
     with open(BASE_DIR + "/results/fixed_horizon_execution_times/" + file_name + ".txt", "w") as output_time:
         output_time.write(str(exec_time))
@@ -178,6 +184,9 @@ def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_f
     with open(temp_results_path, "w") as output_results:
         writer = csv.writer(output_results, lineterminator='\n')
         writer.writerows(test_series_list)
+
+    if not os.path.exists(BASE_DIR + "/results/fixed_horizon_errors/"):
+        os.makedirs(BASE_DIR + "/results/fixed_horizon_errors/")
 
     subprocess.call(["Rscript", "--vanilla", BASE_DIR + "/utils/error_calc_helper.R", BASE_DIR, forecast_file_path, temp_results_path, temp_dataset_path, str(seasonality), file_name ])
 
@@ -221,12 +230,16 @@ get_deep_nn_forecasts("saugeen_river_flow", 9, "saugeenday_dataset.tsf", "feed_f
 get_deep_nn_forecasts("sunspot", 9, "sunspot_dataset_without_missing_values.tsf", "feed_forward", 30, True)
 get_deep_nn_forecasts("covid_deaths", 9, "covid_deaths_dataset.tsf", "feed_forward", 30, True)
 get_deep_nn_forecasts("weather", 9, "weather_dataset.tsf", "feed_forward", 30)
-get_deep_nn_forecasts("elecdemand", 420, "elecdemand_dataset.tsf", "feed_forward", 336)
 get_deep_nn_forecasts("traffic_hourly", 30, "traffic_hourly_dataset.tsf", "feed_forward", 168)
 get_deep_nn_forecasts("electricity_hourly", 30, "electricity_hourly_dataset.tsf", "feed_forward", 168, True)
 get_deep_nn_forecasts("solar_10_minutes", 50, "solar_10_minutes_dataset.tsf", "feed_forward", 1008)
 get_deep_nn_forecasts("kdd_cup", 210, "kdd_cup_2018_dataset_without_missing_values.tsf", "feed_forward", 168)
 get_deep_nn_forecasts("melbourne_pedestrian_counts", 210, "pedestrian_counts_dataset.tsf", "feed_forward", 24, True)
+get_deep_nn_forecasts("bitcoin", 9, "bitcoin_dataset_without_missing_values.tsf", "feed_forward", 30)
+get_deep_nn_forecasts("vehicle_trips", 9, "vehicle_trips_dataset_without_missing_values.tsf", "feed_forward", 30, True)
+get_deep_nn_forecasts("aus_elecdemand", 420, "australian_electricity_demand_dataset.tsf", "feed_forward", 336)
+get_deep_nn_forecasts("rideshare", 210, "rideshare_dataset_without_missing_values.tsf", "feed_forward", 168)
+get_deep_nn_forecasts("temperature_rain", 9, "temperature_rain_dataset_without_missing_values.tsf", "feed_forward", 30)
 
 
 # Transformer
@@ -262,53 +275,16 @@ get_deep_nn_forecasts("saugeen_river_flow", 9, "saugeenday_dataset.tsf", "transf
 get_deep_nn_forecasts("sunspot", 9, "sunspot_dataset_without_missing_values.tsf", "transformer", 30, True)
 get_deep_nn_forecasts("covid_deaths", 9, "covid_deaths_dataset.tsf", "transformer", 30, True)
 get_deep_nn_forecasts("weather", 9, "weather_dataset.tsf", "transformer", 30)
-get_deep_nn_forecasts("elecdemand", 420, "elecdemand_dataset.tsf", "transformer", 336)
 get_deep_nn_forecasts("traffic_hourly", 30, "traffic_hourly_dataset.tsf", "transformer", 168)
 get_deep_nn_forecasts("electricity_hourly", 30, "electricity_hourly_dataset.tsf", "transformer", 168, True)
 get_deep_nn_forecasts("solar_10_minutes", 50, "solar_10_minutes_dataset.tsf", "transformer", 1008)
 get_deep_nn_forecasts("kdd_cup", 210, "kdd_cup_2018_dataset_without_missing_values.tsf", "transformer", 168)
 get_deep_nn_forecasts("melbourne_pedestrian_counts", 210, "pedestrian_counts_dataset.tsf", "transformer", 24, True)
-
-
-# WaveNet
-get_deep_nn_forecasts("cif_2016_6", 15, "cif_6_dataset.tsf", "wavenet", 6)
-get_deep_nn_forecasts("cif_2016_12", 15, "cif_12_dataset.tsf", "wavenet", 12)
-get_deep_nn_forecasts("nn5_daily", 9, "nn5_daily_dataset_without_missing_values.tsf", "wavenet")
-get_deep_nn_forecasts("tourism_yearly", 2, "tourism_yearly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("tourism_quarterly", 5, "tourism_quarterly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("tourism_monthly", 15, "tourism_monthly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m1_yearly", 2, "m1_yearly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m1_quarterly", 5, "m1_quarterly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m1_monthly", 15, "m1_monthly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m3_yearly", 2, "m3_yearly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m3_quarterly", 5, "m3_quarterly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m3_monthly", 15, "m3_monthly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m3_other", 2, "m3_other_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m4_quarterly", 5, "m4_quarterly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m4_monthly", 15, "m4_monthly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m4_weekly", 65, "m4_weekly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m4_daily", 9, "m4_daily_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("m4_hourly", 210, "m4_hourly_dataset.tsf", "wavenet")
-get_deep_nn_forecasts("car_parts", 15, "car_parts_dataset_without_missing_values.tsf", "wavenet", 12, True)
-get_deep_nn_forecasts("hospital", 15, "hospital_dataset.tsf", "wavenet", 12, True)
-get_deep_nn_forecasts("fred_md", 15, "fred_md_dataset.tsf", "wavenet", 12)
-get_deep_nn_forecasts("nn5_weekly", 65, "nn5_weekly_dataset.tsf", "wavenet", 8)
-get_deep_nn_forecasts("traffic_weekly", 65, "traffic_weekly_dataset.tsf", "wavenet", 8)
-get_deep_nn_forecasts("electricity_weekly", 65, "electricity_weekly_dataset.tsf", "wavenet", 8, True)
-get_deep_nn_forecasts("solar_weekly", 6, "solar_weekly_dataset.tsf", "wavenet", 5)
-get_deep_nn_forecasts("kaggle_web_traffic_weekly", 10, "kaggle_web_traffic_weekly_dataset.tsf", "wavenet", 8, True)
-get_deep_nn_forecasts("dominick", 10, "dominick_dataset.tsf", "wavenet", 8)
-get_deep_nn_forecasts("us_births", 9, "us_births_dataset.tsf", "wavenet", 30, True)
-get_deep_nn_forecasts("saugeen_river_flow", 9, "saugeenday_dataset.tsf", "wavenet", 30)
-get_deep_nn_forecasts("sunspot", 9, "sunspot_dataset_without_missing_values.tsf", "wavenet", 30, True)
-get_deep_nn_forecasts("covid_deaths", 9, "covid_deaths_dataset.tsf", "wavenet", 30, True)
-get_deep_nn_forecasts("weather", 9, "weather_dataset.tsf", "wavenet", 30)
-get_deep_nn_forecasts("elecdemand", 420, "elecdemand_dataset.tsf", "wavenet", 336)
-get_deep_nn_forecasts("traffic_hourly", 30, "traffic_hourly_dataset.tsf", "wavenet", 168)
-get_deep_nn_forecasts("electricity_hourly", 30, "electricity_hourly_dataset.tsf", "wavenet", 168, True)
-get_deep_nn_forecasts("solar_10_minutes", 50, "solar_10_minutes_dataset.tsf", "wavenet", 1008)
-get_deep_nn_forecasts("kdd_cup", 210, "kdd_cup_2018_dataset_without_missing_values.tsf", "wavenet", 168)
-get_deep_nn_forecasts("melbourne_pedestrian_counts", 210, "pedestrian_counts_dataset.tsf", "wavenet", 24, True)
+get_deep_nn_forecasts("bitcoin", 9, "bitcoin_dataset_without_missing_values.tsf", "transformer", 30)
+get_deep_nn_forecasts("vehicle_trips", 9, "vehicle_trips_dataset_without_missing_values.tsf", "transformer", 30, True)
+get_deep_nn_forecasts("aus_elecdemand", 420, "australian_electricity_demand_dataset.tsf", "transformer", 336)
+get_deep_nn_forecasts("rideshare", 210, "rideshare_dataset_without_missing_values.tsf", "transformer", 168)
+get_deep_nn_forecasts("temperature_rain", 9, "temperature_rain_dataset_without_missing_values.tsf", "transformer", 30)
 
 
 # DeepAR
@@ -344,12 +320,16 @@ get_deep_nn_forecasts("saugeen_river_flow", 9, "saugeenday_dataset.tsf", "deepar
 get_deep_nn_forecasts("sunspot", 9, "sunspot_dataset_without_missing_values.tsf", "deepar", 30, True)
 get_deep_nn_forecasts("covid_deaths", 9, "covid_deaths_dataset.tsf", "deepar", 30, True)
 get_deep_nn_forecasts("weather", 9, "weather_dataset.tsf", "deepar", 30)
-get_deep_nn_forecasts("elecdemand", 420, "elecdemand_dataset.tsf", "deepar", 336)
 get_deep_nn_forecasts("traffic_hourly", 30, "traffic_hourly_dataset.tsf", "deepar", 168)
 get_deep_nn_forecasts("electricity_hourly", 30, "electricity_hourly_dataset.tsf", "deepar", 168, True)
 get_deep_nn_forecasts("solar_10_minutes", 50, "solar_10_minutes_dataset.tsf", "deepar", 1008)
 get_deep_nn_forecasts("kdd_cup", 210, "kdd_cup_2018_dataset_without_missing_values.tsf", "deepar", 168)
 get_deep_nn_forecasts("melbourne_pedestrian_counts", 210, "pedestrian_counts_dataset.tsf", "deepar", 24, True)
+get_deep_nn_forecasts("bitcoin", 9, "bitcoin_dataset_without_missing_values.tsf", "deepar", 30)
+get_deep_nn_forecasts("vehicle_trips", 9, "vehicle_trips_dataset_without_missing_values.tsf", "deepar", 30, True)
+get_deep_nn_forecasts("aus_elecdemand", 420, "australian_electricity_demand_dataset.tsf", "deepar", 336)
+get_deep_nn_forecasts("rideshare", 210, "rideshare_dataset_without_missing_values.tsf", "deepar", 168)
+get_deep_nn_forecasts("temperature_rain", 9, "temperature_rain_dataset_without_missing_values.tsf", "deepar", 30)
 
 
 # N-BEATS
@@ -385,23 +365,57 @@ get_deep_nn_forecasts("saugeen_river_flow", 9, "saugeenday_dataset.tsf", "nbeats
 get_deep_nn_forecasts("sunspot", 9, "sunspot_dataset_without_missing_values.tsf", "nbeats", 30, True)
 get_deep_nn_forecasts("covid_deaths", 9, "covid_deaths_dataset.tsf", "nbeats", 30, True)
 get_deep_nn_forecasts("weather", 9, "weather_dataset.tsf", "nbeats", 30)
-get_deep_nn_forecasts("elecdemand", 420, "elecdemand_dataset.tsf", "nbeats", 336)
 get_deep_nn_forecasts("traffic_hourly", 30, "traffic_hourly_dataset.tsf", "nbeats", 168)
 get_deep_nn_forecasts("electricity_hourly", 30, "electricity_hourly_dataset.tsf", "nbeats", 168, True)
 get_deep_nn_forecasts("solar_10_minutes", 50, "solar_10_minutes_dataset.tsf", "nbeats", 1008)
 get_deep_nn_forecasts("kdd_cup", 210, "kdd_cup_2018_dataset_without_missing_values.tsf", "nbeats", 168)
 get_deep_nn_forecasts("melbourne_pedestrian_counts", 210, "pedestrian_counts_dataset.tsf", "nbeats", 24, True)
+get_deep_nn_forecasts("bitcoin", 9, "bitcoin_dataset_without_missing_values.tsf", "nbeats", 30)
+get_deep_nn_forecasts("vehicle_trips", 9, "vehicle_trips_dataset_without_missing_values.tsf", "nbeats", 30, True)
+get_deep_nn_forecasts("aus_elecdemand", 420, "australian_electricity_demand_dataset.tsf", "nbeats", 336)
+get_deep_nn_forecasts("rideshare", 210, "rideshare_dataset_without_missing_values.tsf", "nbeats", 168)
+get_deep_nn_forecasts("temperature_rain", 9, "temperature_rain_dataset_without_missing_values.tsf", "nbeats", 30)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+# WaveNet
+get_deep_nn_forecasts("cif_2016_6", 15, "cif_6_dataset.tsf", "wavenet", 6)
+get_deep_nn_forecasts("cif_2016_12", 15, "cif_12_dataset.tsf", "wavenet", 12)
+get_deep_nn_forecasts("nn5_daily", 9, "nn5_daily_dataset_without_missing_values.tsf", "wavenet")
+get_deep_nn_forecasts("tourism_yearly", 2, "tourism_yearly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("tourism_quarterly", 5, "tourism_quarterly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("tourism_monthly", 15, "tourism_monthly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m1_yearly", 2, "m1_yearly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m1_quarterly", 5, "m1_quarterly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m1_monthly", 15, "m1_monthly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m3_yearly", 2, "m3_yearly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m3_quarterly", 5, "m3_quarterly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m3_monthly", 15, "m3_monthly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m3_other", 2, "m3_other_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m4_quarterly", 5, "m4_quarterly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m4_monthly", 15, "m4_monthly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m4_weekly", 65, "m4_weekly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m4_daily", 9, "m4_daily_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("m4_hourly", 210, "m4_hourly_dataset.tsf", "wavenet")
+get_deep_nn_forecasts("car_parts", 15, "car_parts_dataset_without_missing_values.tsf", "wavenet", 12, True)
+get_deep_nn_forecasts("hospital", 15, "hospital_dataset.tsf", "wavenet", 12, True)
+get_deep_nn_forecasts("fred_md", 15, "fred_md_dataset.tsf", "wavenet", 12)
+get_deep_nn_forecasts("nn5_weekly", 65, "nn5_weekly_dataset.tsf", "wavenet", 8)
+get_deep_nn_forecasts("traffic_weekly", 65, "traffic_weekly_dataset.tsf", "wavenet", 8)
+get_deep_nn_forecasts("electricity_weekly", 65, "electricity_weekly_dataset.tsf", "wavenet", 8, True)
+get_deep_nn_forecasts("solar_weekly", 6, "solar_weekly_dataset.tsf", "wavenet", 5)
+get_deep_nn_forecasts("kaggle_web_traffic_weekly", 10, "kaggle_web_traffic_weekly_dataset.tsf", "wavenet", 8, True)
+get_deep_nn_forecasts("dominick", 10, "dominick_dataset.tsf", "wavenet", 8)
+get_deep_nn_forecasts("us_births", 9, "us_births_dataset.tsf", "wavenet", 30, True)
+get_deep_nn_forecasts("saugeen_river_flow", 9, "saugeenday_dataset.tsf", "wavenet", 30)
+get_deep_nn_forecasts("sunspot", 9, "sunspot_dataset_without_missing_values.tsf", "wavenet", 30, True)
+get_deep_nn_forecasts("covid_deaths", 9, "covid_deaths_dataset.tsf", "wavenet", 30, True)
+get_deep_nn_forecasts("weather", 9, "weather_dataset.tsf", "wavenet", 30)
+get_deep_nn_forecasts("traffic_hourly", 30, "traffic_hourly_dataset.tsf", "wavenet", 168)
+get_deep_nn_forecasts("electricity_hourly", 30, "electricity_hourly_dataset.tsf", "wavenet", 168, True)
+get_deep_nn_forecasts("kdd_cup", 210, "kdd_cup_2018_dataset_without_missing_values.tsf", "wavenet", 168)
+get_deep_nn_forecasts("melbourne_pedestrian_counts", 210, "pedestrian_counts_dataset.tsf", "wavenet", 24, True)
+get_deep_nn_forecasts("bitcoin", 9, "bitcoin_dataset_without_missing_values.tsf", "wavenet", 30)
+get_deep_nn_forecasts("vehicle_trips", 9, "vehicle_trips_dataset_without_missing_values.tsf", "wavenet", 30, True)
+get_deep_nn_forecasts("aus_elecdemand", 420, "australian_electricity_demand_dataset.tsf", "wavenet", 336)
+get_deep_nn_forecasts("rideshare", 210, "rideshare_dataset_without_missing_values.tsf", "wavenet", 168)
+get_deep_nn_forecasts("temperature_rain", 9, "temperature_rain_dataset_without_missing_values.tsf", "wavenet", 30)

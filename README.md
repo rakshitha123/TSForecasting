@@ -17,7 +17,7 @@ Furthermore, we have implemented a wrapper to do fixed horizon forecasting menti
 
 A similar wrapper is implemented in Python for neural networks and deep learning experiments to execute the full pipeline of model evaluation using a single function call. For more details, please see the examples available at [experiments/deep_learning_experiments.py](https://github.com/rakshitha123/TSForecasting/blob/master/experiments/deep_learning_experiments.py)
 
-All experiments related to rolling origin forecasting and feature calculations are also there in the "experiments" folder. Please see the examples in the corresponding R scripts in the "experiments" folder for more details. Makesure to create a folder named "results" in the parent level and sub-folders as necessary before running the experiments. The outputs of the experiments will be stored into the sub-folders within the "results" folder as mentioned follows:
+All experiments related to rolling origin forecasting and feature calculations are also there in the "experiments" folder. Please see the examples in the corresponding R scripts in the "experiments" folder for more details. The outputs of the experiments will be stored into the sub-folders within a folder named, "results" as mentioned follows:
 
 | Sub-folder Name               | Stored Output                  | 
 |-------------------------------|:------------------------------:|
