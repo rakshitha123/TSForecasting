@@ -47,8 +47,12 @@ for(f in seq_along(FREQUENCIES)){
 # index - the name of the time attribute that should be used as the index when creating the tsibble
 # external_forecast_horizon - the required forecast horizon, if it is not available in the .tsf file
 # integer_conversion - whether the forecasts should be rounded or not
+
 do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file_name, key = NULL, index = NULL, external_forecast_horizon = NULL, integer_conversion = FALSE){
   
+  for (method in methods) {
+      file.remove(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt")))
+  }
   print(paste0("Started loading ", dataset_name))
   
   # Loading data from the .tsf file
@@ -127,7 +131,7 @@ do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file
       
       if(integer_conversion)
         current_method_forecasts <- round(current_method_forecasts)
-      
+
       write.table(t(c(all_serie_names[s], current_method_forecasts)), file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt"), fsep = "/"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE, append = TRUE)
     }
   }
@@ -147,11 +151,10 @@ do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file
   
   for(method in methods){
     forecast_matrix <- read.csv(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt"), fsep = "/"), header = F)
-    forecast_matrix <- as.matrix(forecast_matrix[-1])
+    forecast_matrix <- as.matrix(forecast_matrix[,-1])
     calculate_errors(forecast_matrix, actual_matrix, train_series_list, seasonality, file.path(BASE_DIR, "results", "fixed_horizon_errors", paste0(dataset_name, "_", method), fsep = "/"))
   }
 }
-
 
 
 # This function performs the fixed horizon evaluation with global models
