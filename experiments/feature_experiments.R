@@ -185,21 +185,22 @@ calculate_features <- function(dataset_name, input_file_name, key = NULL, index 
 
 
 # Example Usage
+#uncomment to try
+## tsfeatures
+#calculate_features("sample", "sample.tsf", "series_name", "start_timestamp")
 
-# tsfeatures
-calculate_features("sample", "sample.tsf", "series_name", "start_timestamp")
+## catch22 features
+#calculate_features("sample", "sample.tsf", "series_name", "start_timestamp", "catch22")
 
-# catch22 features
-calculate_features("sample", "sample.tsf", "series_name", "start_timestamp", "catch22")
-
-# BoxCox lambdas
-calculate_features("sample", "sample.tsf", "series_name", "start_timestamp", "lambdas")
+## BoxCox lambdas
+#calculate_features("sample", "sample.tsf", "series_name", "start_timestamp", "lambdas")
 
 
 
 # Feature calculations
 # Download the .tsf files from https://zenodo.org/communities/forecasting and put them into "tsf_data" folder, before trying the following examples
-
+CALCULATE_ALL_FEATURES = FALSE #set to TRUE to process all features
+if (CALCULATE_ALL_FEATURES) {
 # tsfeatures
 calculate_features("nn5_daily", "nn5_daily_dataset_without_missing_values.tsf", "series_name", "start_timestamp")
 calculate_features("m3_monthly", "m3_monthly_dataset.tsf", "series_name", "start_timestamp")
@@ -346,5 +347,5 @@ calculate_features("bitcoin", "bitcoin_dataset_without_missing_values.tsf", "ser
 calculate_features("aus_elecdemand", "australian_electricity_demand_dataset.tsf", "series_name", "start_timestamp", "lambda")
 calculate_features("rideshare", "rideshare_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "lambda")
 calculate_features("vehicle_trips", "vehicle_trips_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "lambda")
-
+}
 
