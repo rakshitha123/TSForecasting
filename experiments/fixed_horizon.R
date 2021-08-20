@@ -86,7 +86,7 @@ do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file
   
   print("started Forecasting")
   
-  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", fsep = "/"), showWarnings = FALSE)
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", fsep = "/"), showWarnings = FALSE, recursive=TRUE)
   
   for(s in seq_along(all_serie_names)){
     print(s)
@@ -139,11 +139,11 @@ do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file
   # Execution time
   exec_time <- end_time - start_time
   print(exec_time)
-  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_execution_times", fsep = "/"), showWarnings = FALSE)
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_execution_times", fsep = "/"), showWarnings = FALSE, recursive=TRUE)
   write(paste(exec_time, attr(exec_time, "units")), file = file.path(BASE_DIR, "results", "fixed_horizon_execution_times", paste0(dataset_name, ".txt"), fsep = "/"), append = FALSE)
   
   # Error calculations
-  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_errors", fsep = "/"), showWarnings = FALSE)
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_errors", fsep = "/"), showWarnings = FALSE, recursive=TRUE)
   
   for(method in methods){
     forecast_matrix <- read.csv(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt"), fsep = "/"), header = F)
@@ -229,7 +229,7 @@ do_fixed_horizon_global_forecasting <- function(dataset_name, lag, input_file_na
   if(integer_conversion)
     forecast_matrix <- round(forecast_matrix)
   
-  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", fsep = "/"), showWarnings = FALSE)
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", fsep = "/"), showWarnings = FALSE, recursive=TRUE)
   
   for(s in seq_along(all_serie_names)){
     actual_series <- as.numeric(actual_matrix[s,])
