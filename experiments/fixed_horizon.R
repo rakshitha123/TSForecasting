@@ -248,11 +248,11 @@ do_fixed_horizon_global_forecasting <- function(dataset_name, lag, input_file_na
   # Execution time
   exec_time <- end_time - start_time
   print(exec_time)
-  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_execution_times", fsep = "/"), showWarnings = FALSE)
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_execution_times", fsep = "/"), showWarnings = FALSE, recursive=TRUE)
   write(paste(exec_time, attr(exec_time, "units")), file = file.path(BASE_DIR, "results", "fixed_horizon_execution_times", paste0(dataset_name, "_", method, "_lag_", lag, ".txt"), fsep = "/"), append = FALSE)
   
   # Error calculations
-  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_errors", fsep = "/"), showWarnings = FALSE)
+  dir.create(file.path(BASE_DIR, "results", "fixed_horizon_errors", fsep = "/"), showWarnings = FALSE, recursive=TRUE)
   forecast_matrix <- as.matrix(forecast_matrix)
   calculate_errors(forecast_matrix, actual_matrix, train_series_list, seasonality, file.path(BASE_DIR, "results", "fixed_horizon_errors", paste0(dataset_name, "_", method, "_lag_", lag), fsep = "/"))
 }
@@ -260,8 +260,9 @@ do_fixed_horizon_global_forecasting <- function(dataset_name, lag, input_file_na
 
 
 # Example of usage
-do_fixed_horizon_local_forecasting("sample", MODELS_LOW_FREQ, "sample.tsf", "series_name", "start_timestamp", 8)
-do_fixed_horizon_global_forecasting("sample", 65, "sample.tsf", "pooled_regression", "series_name", "start_timestamp", 8)
+#uncomment to try
+#do_fixed_horizon_local_forecasting("sample", MODELS_LOW_FREQ, "sample.tsf", "series_name", "start_timestamp", 8)
+#do_fixed_horizon_global_forecasting("sample", 65, "sample.tsf", "pooled_regression", "series_name", "start_timestamp", 8)
 
 
 
@@ -273,6 +274,9 @@ do_fixed_horizon_global_forecasting("sample", 65, "sample.tsf", "pooled_regressi
 # Due to short series length, lag is chosen as 10 for dominick dataset and 6 for solar weekly dataset (1.25 * forecast_horizon)
 # For multi-seasonal datasets, the seasonality corresponding with the weekly frequency is chosen for lag calculation
 # If it was not possible due to computational complexity or short series length, then we consider the seasonality corresponding with daily freqency for lag calculation
+
+COMPUTE_FIXED_HORIZON_DSET = FALSE
+if (COMPUTE_FIXED_HORIZON_DSET) {
 
 do_fixed_horizon_local_forecasting("cif_2016", MODELS_HIGH_FREQ, "cif_2016_dataset.tsf")
 do_fixed_horizon_local_forecasting("nn5_daily", MODELS_HIGH_FREQ, "nn5_daily_dataset_without_missing_values.tsf", "series_name", "start_timestamp")
@@ -427,7 +431,7 @@ do_fixed_horizon_global_forecasting("melbourne_pedestrian_counts", 210, "pedestr
 do_fixed_horizon_global_forecasting("aus_elecdemand", 420, "australian_electricity_demand_dataset.tsf", "catboost", "series_name", "start_timestamp", 336)
 do_fixed_horizon_global_forecasting("rideshare", 210, "rideshare_dataset_without_missing_values.tsf", "catboost", "series_name", "start_timestamp", 168)
 
-
+}
 
 
 
