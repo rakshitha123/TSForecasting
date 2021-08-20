@@ -171,6 +171,7 @@ do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file
 # integer_conversion - whether the forecasts should be rounded or not
 do_fixed_horizon_global_forecasting <- function(dataset_name, lag, input_file_name, method, key = NULL, index = NULL, external_forecast_horizon = NULL, integer_conversion = FALSE){
   
+  file.remove(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, "_lag_", lag, ".txt"), fsep = "/"))
   print(paste0("Started loading ", dataset_name))
   
   # Loading data from the .tsf file
