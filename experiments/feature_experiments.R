@@ -171,13 +171,13 @@ calculate_features <- function(dataset_name, input_file_name, key = NULL, index 
   
   # Writing the calculated features into a file
   if(feature_type == "tsfeatures"){
-    dir.create(file.path(BASE_DIR, "results", "tsfeatures", fsep = "/"), showWarnings = FALSE, recursice = TRUE)
+    dir.create(file.path(BASE_DIR, "results", "tsfeatures", fsep = "/"), showWarnings = FALSE, recursive = TRUE)
     write.table(all_features, file.path(BASE_DIR, "results", "tsfeatures", output_file_name, fsep = "/"), row.names = FALSE, col.names = TRUE, sep = ",", quote = FALSE)
   }else if(feature_type == "catch22"){
-    dir.create(file.path(BASE_DIR, "results", "catch22_features", fsep = "/"), showWarnings = FALSE, recursice = TRUE)
+    dir.create(file.path(BASE_DIR, "results", "catch22_features", fsep = "/"), showWarnings = FALSE, recursive = TRUE)
     write.table(all_features, file.path(BASE_DIR, "results", "catch22_features", output_file_name, fsep = "/"), row.names = FALSE, col.names = TRUE, sep = ",", quote = FALSE)
   }else{
-    dir.create(file.path(BASE_DIR, "results", "lambdas", fsep = "/"), showWarnings = FALSE, recursice = TRUE)
+    dir.create(file.path(BASE_DIR, "results", "lambdas", fsep = "/"), showWarnings = FALSE, recursive = TRUE)
     write.table(lambdas, file.path(BASE_DIR, "results", "lambdas", output_file_name, fsep = "/"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE)
   }
 }
