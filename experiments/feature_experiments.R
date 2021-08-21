@@ -3,10 +3,7 @@ library(Rcatch22)
 
 BASE_DIR <- "TSForecasting"
 
-
-
-source(file.path(BASE_DIR, "experiments", "feature_funcions.R", fsep = "/"))
-
+source(file.path(BASE_DIR, "experiments", "feature_functions.R", fsep = "/"))
 
 
 # Feature calculations
@@ -158,5 +155,5 @@ calculate_features("bitcoin", "bitcoin_dataset_without_missing_values.tsf", "ser
 calculate_features("aus_elecdemand", "australian_electricity_demand_dataset.tsf", "series_name", "start_timestamp", "lambda")
 calculate_features("rideshare", "rideshare_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "lambda")
 calculate_features("vehicle_trips", "vehicle_trips_dataset_without_missing_values.tsf", "series_name", "start_timestamp", "lambda")
-}
+
 

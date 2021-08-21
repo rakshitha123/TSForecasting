@@ -1,7 +1,6 @@
 library(tidyverse)
 library(Rcatch22)
 
-
 source(file.path(BASE_DIR, "utils", "data_loader.R", fsep = "/"))
 
 
@@ -185,12 +184,13 @@ calculate_features <- function(dataset_name, input_file_name, key = NULL, index 
 
 
 # Example Usage
-#uncomment to try
+# uncomment to try
+
 ## tsfeatures
-#calculate_features("sample", "sample.tsf", "series_name", "start_timestamp")
+# calculate_features("sample", "sample.tsf", "series_name", "start_timestamp")
 
 ## catch22 features
-#calculate_features("sample", "sample.tsf", "series_name", "start_timestamp", "catch22")
+# calculate_features("sample", "sample.tsf", "series_name", "start_timestamp", "catch22")
 
 ## BoxCox lambdas
-#calculate_features("sample", "sample.tsf", "series_name", "start_timestamp", "lambdas")
+# calculate_features("sample", "sample.tsf", "series_name", "start_timestamp", "lambdas")
