@@ -1,7 +1,9 @@
 # Implementation of global models: pooled regression and CatBoost
 
 library(glmnet)
-library(catboost)
+
+failed_loading_catboost = FALSE
+tryCatch(library(catboost), error = function(err) {failed_loading_catboost<<-TRUE})
 
 set.seed(1)
 
@@ -39,6 +41,7 @@ fit_model <- function(fitting_data, lag, final_lags, forecast_horizon, series_me
     # Fit the pooled regression model
     model <- glm(formula = formula, data = fitting_data)
   }else if(method == "catboost"){
+    if (failed_loading_catboos) stop("Error when loading catboost, cannot run global model based on catboost")
     # Fit the CatBoost model
     train_pool <- catboost.load_pool(data = as.matrix(fitting_data[-1]), label = as.matrix(fitting_data[,1]))
     model <- catboost.train(train_pool)
