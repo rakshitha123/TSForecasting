@@ -1,4 +1,3 @@
-
 source(file.path(BASE_DIR, "utils", "data_loader.R", fsep = "/"))
 source(file.path(BASE_DIR, "utils", "error_calculator.R", fsep = "/"))
 source(file.path(BASE_DIR, "utils", "global_model_helper.R", fsep = "/"))
@@ -7,12 +6,6 @@ source(file.path(BASE_DIR, "models", "global_models.R", fsep = "/"))
 
 # The name of the column containing time series values after loading data from the .tsf file into a tsibble
 VALUE_COL_NAME <- "series_value"
-
-# Defining the required forecasting models based on frequency. 
-# Current supporting forecasting methods are ets, theta, simple exponential smoothing, tbats, auto.arima and dynamic harmonic regression arima
-# You can also define new forecasting methods (probably in models/local_univariate_models.R) and link them here as required
-MODELS_HIGH_FREQ <- c("ses", "theta", "ets", "arima") # for yearly, quarterly, monthly, and daily datasets
-MODELS_LOW_FREQ <- c("ses", "theta", "tbats", "dhr_arima") # for 4_seconds, minutely, 10_minutes, 15_minutes, half_hourly, hourly and weekly datasets
 
 # Seasonality values corresponding with the frequencies: 4_seconds, minutely, 10_minutes, 15_minutes, half_hourly, hourly, daily, weekly, monthly, quarterly and yearly
 # Consider multiple seasonalities for frequencies less than daily
@@ -46,12 +39,9 @@ for(f in seq_along(FREQUENCIES)){
 # index - the name of the time attribute that should be used as the index when creating the tsibble
 # external_forecast_horizon - the required forecast horizon, if it is not available in the .tsf file
 # integer_conversion - whether the forecasts should be rounded or not
-
-do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file_name, key = NULL, index = NULL, external_forecast_horizon = NULL, integer_conversion = FALSE){
+do_fixed_horizon_local_forecasting <- function(dataset_name, method, input_file_name, key = NULL, index = NULL, external_forecast_horizon = NULL, integer_conversion = FALSE){
   
-  for (method in methods) {
-    file.remove(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt")))
-  }
+  file.remove(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt")))
   print(paste0("Started loading ", dataset_name))
   
   # Loading data from the .tsf file
@@ -120,19 +110,18 @@ do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file
       series <- forecast:::msts(train_series_data[[VALUE_COL_NAME]], start = start_date, seasonal.periods = seasonality)
     
     # Forecasting
-    for(method in methods){
-      current_method_forecasts <- eval(parse(text = paste0("get_", method, "_forecasts(series, forecast_horizon)")))
-      
-      if(typeof(current_method_forecasts) == "list")
-        current_method_forecasts <- current_method_forecasts[[1]]
-      
-      current_method_forecasts[is.na(current_method_forecasts)] <- 0
-      
-      if(integer_conversion)
-        current_method_forecasts <- round(current_method_forecasts)
-      
-      write.table(t(c(all_serie_names[s], current_method_forecasts)), file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt"), fsep = "/"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE, append = TRUE)
-    }
+    
+    current_method_forecasts <- eval(parse(text = paste0("get_", method, "_forecasts(series, forecast_horizon)")))
+    
+    if(typeof(current_method_forecasts) == "list")
+      current_method_forecasts <- current_method_forecasts[[1]]
+    
+    current_method_forecasts[is.na(current_method_forecasts)] <- 0
+    
+    if(integer_conversion)
+      current_method_forecasts <- round(current_method_forecasts)
+    
+    write.table(t(c(all_serie_names[s], current_method_forecasts)), file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt"), fsep = "/"), row.names = FALSE, col.names = FALSE, sep = ",", quote = FALSE, append = TRUE)
   }
   
   end_time <- Sys.time()
@@ -143,16 +132,14 @@ do_fixed_horizon_local_forecasting <- function(dataset_name, methods, input_file
   exec_time <- end_time - start_time
   print(exec_time)
   dir.create(file.path(BASE_DIR, "results", "fixed_horizon_execution_times", fsep = "/"), showWarnings = FALSE, recursive=TRUE)
-  write(paste(exec_time, attr(exec_time, "units")), file = file.path(BASE_DIR, "results", "fixed_horizon_execution_times", paste0(dataset_name, ".txt"), fsep = "/"), append = FALSE)
+  write(paste(exec_time, attr(exec_time, "units")), file = file.path(BASE_DIR, "results", "fixed_horizon_execution_times", paste0(dataset_name, "_", method, ".txt"), fsep = "/"), append = FALSE)
   
   # Error calculations
   dir.create(file.path(BASE_DIR, "results", "fixed_horizon_errors", fsep = "/"), showWarnings = FALSE, recursive=TRUE)
   
-  for(method in methods){
-    forecast_matrix <- read.csv(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt"), fsep = "/"), header = F)
-    forecast_matrix <- as.matrix(forecast_matrix[,-1])
-    calculate_errors(forecast_matrix, actual_matrix, train_series_list, seasonality, file.path(BASE_DIR, "results", "fixed_horizon_errors", paste0(dataset_name, "_", method), fsep = "/"))
-  }
+  forecast_matrix <- read.csv(file.path(BASE_DIR, "results", "fixed_horizon_forecasts", paste0(dataset_name, "_", method, ".txt"), fsep = "/"), header = F)
+  forecast_matrix <- as.matrix(forecast_matrix[-1])
+  calculate_errors(forecast_matrix, actual_matrix, train_series_list, seasonality, file.path(BASE_DIR, "results", "fixed_horizon_errors", paste0(dataset_name, "_", method), fsep = "/"))
 }
 
 
@@ -263,6 +250,7 @@ do_fixed_horizon_global_forecasting <- function(dataset_name, lag, input_file_na
 
 
 # Example of usage
-#uncomment to try
-#do_fixed_horizon_local_forecasting("sample", MODELS_LOW_FREQ, "sample.tsf", "series_name", "start_timestamp", 8)
-#do_fixed_horizon_global_forecasting("sample", 65, "sample.tsf", "pooled_regression", "series_name", "start_timestamp", 8)
+# uncomment to try
+
+# do_fixed_horizon_local_forecasting("sample", "ses, "sample.tsf", "series_name", "start_timestamp", 8)
+# do_fixed_horizon_global_forecasting("sample", 65, "sample.tsf", "pooled_regression", "series_name", "start_timestamp", 8)
