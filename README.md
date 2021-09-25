@@ -37,7 +37,7 @@ The outputs of the experiments will be stored into the sub-folders within a fold
 | lambdas                       | boxcox lambdas                 |
 
 # Integration of New Forecasting Models
-We also provide a simple interface for you to add other statistical, machine learning and deep learning models which we have not implemented in this framework. Please follow the below steps for new forecasting models integrations. Once, you integrate a new forecasting model, you can send us a pull request, so that we can integrate your implementation to our framework. You can also send the evaluation results of your new models if you would like to publish them in our [website](https://forecastingdata.org/). 
+We also provide a simple interface for you to add other statistical, machine learning and deep learning models which we have not implemented in this framework. Please follow the below steps if you want to integrate a new forecasting model. Once, you integrate a new forecasting model, you can send us a pull request, so that we can integrate your implementation to our framework.  
 
 
 ## Integration of New Statistical Models
@@ -92,7 +92,7 @@ do_fixed_horizon_global_forecasting("nn5_daily", 9, "nn5_daily_dataset_without_m
 ```
 
 ## Integration of New Deep Learning Models
-If you want to integrate a new deep learning model (GluonTS based) named "alpha" to our framework, please add new if statements in the method "get_deep_nn_forecasts" in  [experiments/deep_learning_experiments.py](https://github.com/rakshitha123/TSForecasting/blob/master/experiments/deep_learning_experiments.py) as follows:
+If you want to integrate a new deep learning model (GluonTS based) named "alpha" to our framework, please add a new if statement in the method "get_deep_nn_forecasts" in  [experiments/deep_learning_experiments.py](https://github.com/rakshitha123/TSForecasting/blob/master/experiments/deep_learning_experiments.py) as follows:
 
 ```{r} 
 def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_forecast_horizon = None, integer_conversion = False):
@@ -111,7 +111,7 @@ get_deep_nn_forecasts("nn5_daily", 9, "nn5_daily_dataset_without_missing_values.
 ```
 
 ## Evaluation of New Forecasting Models
-The forecasts provided by the new models you integrate will also be automatically evaluated in the same way as of our forecasting models and thus, the results of your forecasting models and our forecasting models are directly comparable with each other.
+The forecasts provided by the new models you integrate will also be automatically evaluated in the same way as of our forecasting models and thus, the results of your forecasting models and our forecasting models are directly comparable with each other. You can also send the evaluation results of your new models, if you would like to publish them in our [website](https://forecastingdata.org/).
 
 
 # Citing Our Work
