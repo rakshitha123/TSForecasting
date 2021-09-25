@@ -36,6 +36,83 @@ The outputs of the experiments will be stored into the sub-folders within a fold
 | catch22_features              | catch22 features               |
 | lambdas                       | boxcox lambdas                 |
 
+# Integration of New Forecasting Models
+We also provide a simple interface for you to add other statistical, machine learning and deep learning models which we have not implemented in this framework. Please follow the below steps for new forecasting models integrations. Once, you integrate a new forecasting model, you can send us a pull request, so that we can integrate your implementation to our framework. You can also send the evaluation results of your new models if you would like to publish them in our [website](https://forecastingdata.org/). 
+
+
+## Integration of New Statistical Models
+If you want to integrate a new statistical forecasting model named "alpha" to our framework, please add a new function in [models/local_univariate_models.R](https://github.com/rakshitha123/TSForecasting/blob/master/models/local_univariate_models.R) with the name, "get_alpha_forecasts" as follows:
+
+```{r} 
+get_alpha_forecasts <- function(time_series, forecast_horizon){
+  # Write the function body here to return the forecasts
+}
+```
+
+Then, write the experiments in [experiments/fixed_horizon.R](https://github.com/rakshitha123/TSForecasting/blob/master/experiments/fixed_horizon.R) with the new model name to obtain the forecasts and evaluate the model. An example of executing the alpha statistical model with the NN5 daily dataset is shown below.
+
+```{r} 
+do_fixed_horizon_local_forecasting("nn5_daily", "alpha", "nn5_daily_dataset_without_missing_values.tsf", "series_name", "start_timestamp")
+```
+
+## Integration of New Machine Learning Models
+If you want to integrate a new machine learning model named "alpha" to our framework, please add new if statements in the functions "fit_model" and "forec_recursive" in  [models/global_models.R](https://github.com/rakshitha123/TSForecasting/blob/master/models/global_models.R) as follows:
+
+```{r} 
+fit_model <- function(fitting_data, lag, final_lags, forecast_horizon, series_means, method) {
+  # ...
+  
+  if(method == "alpha"){
+     # Write the code here to fit the model 
+     model <- xxx
+  }
+  
+  # ...
+}
+
+
+forec_recursive <- function(lag, model, final_lags, forecast_horizon, series_means, method){
+  # ...
+  
+  for (i in 1:forecast_horizon){  
+    if(method == "alpha"){
+      # Write the code here to get the predictions using the trained model
+      new_predictions <- xxx
+    } 
+  }
+  
+  # ...
+}
+```
+
+Then, write the experiments in [experiments/fixed_horizon.R](https://github.com/rakshitha123/TSForecasting/blob/master/experiments/fixed_horizon.R) with the new model name to obtain the forecasts and evaluate the model. An example of executing the alpha machine learning model with the NN5 daily dataset is shown below.
+
+```{r} 
+do_fixed_horizon_global_forecasting("nn5_daily", 9, "nn5_daily_dataset_without_missing_values.tsf", "alpha", "series_name", "start_timestamp")
+```
+
+## Integration of New Deep Learning Models
+If you want to integrate a new deep learning model (GluonTS based) named "alpha" to our framework, please add new if statements in the method "get_deep_nn_forecasts" in  [experiments/deep_learning_experiments.py](https://github.com/rakshitha123/TSForecasting/blob/master/experiments/deep_learning_experiments.py) as follows:
+
+```{r} 
+def get_deep_nn_forecasts(dataset_name, lag, input_file_name, method, external_forecast_horizon = None, integer_conversion = False):
+  # ...
+  
+  if (method == "alpha"):
+    # Write the code here to fit the model 
+    
+  # ...  
+```
+
+Then, write the experiments in [experiments/deep_learning_experiments.py](https://github.com/rakshitha123/TSForecasting/blob/master/experiments/deep_learning_experiments.py) with the new model name to obtain the forecasts and evaluate the model. An example of executing the alpha deep learning model with the NN5 daily dataset is shown below.
+
+```{r} 
+get_deep_nn_forecasts("nn5_daily", 9, "nn5_daily_dataset_without_missing_values.tsf", "alpha")
+```
+
+## Evaluation of New Forecasting Models
+The forecasts provided by the new models you integrate will also be automatically evaluated in the same way as of our forecasting models and thus, the results of your forecasting models and our forecasting models are directly comparable with each other.
+
 
 # Citing Our Work
 When using this repository, please cite:
