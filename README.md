@@ -111,7 +111,7 @@ get_deep_nn_forecasts("nn5_daily", 9, "nn5_daily_dataset_without_missing_values.
 ```
 
 ## Evaluation of New Forecasting Models
-The forecasts provided by the new models you integrate will also be automatically evaluated in the same way as of our forecasting models and thus, the results of your forecasting models and our forecasting models are directly comparable with each other. You can also send the evaluation results of your new models, if you would like to publish them in our [website](https://forecastingdata.org/).
+The forecasts provided by the new models you integrate will also be automatically evaluated in the same way as our forecasting models and thus, the results of your forecasting models and our forecasting models are directly comparable. You can also send the evaluation results of your new models, if you would like to publish them in our [website](https://forecastingdata.org/).
 
 
 # Citing Our Work
