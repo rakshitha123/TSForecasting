@@ -106,7 +106,9 @@ do_fixed_horizon_local_forecasting("m3_other", "ets", "m3_other_dataset.tsf")
 do_fixed_horizon_local_forecasting("m4_yearly", "ets", "m4_yearly_dataset.tsf", "series_name", "start_timestamp")
 do_fixed_horizon_local_forecasting("m4_quarterly", "ets", "m4_quarterly_dataset.tsf", "series_name", "start_timestamp")
 do_fixed_horizon_local_forecasting("m4_monthly", "ets", "m4_monthly_dataset.tsf", "series_name", "start_timestamp")
+do_fixed_horizon_local_forecasting("m4_weekly", "ets", "m4_weekly_dataset.tsf", "series_name", "start_timestamp")
 do_fixed_horizon_local_forecasting("m4_daily", "ets", "m4_daily_dataset.tsf", "series_name", "start_timestamp")
+do_fixed_horizon_local_forecasting("m4_hourly", "ets", "m4_hourly_dataset.tsf", "series_name", "start_timestamp")
 do_fixed_horizon_local_forecasting("kaggle_web_traffic_daily", "ets", "kaggle_web_traffic_dataset_without_missing_values.tsf", "series_name", "start_timestamp", NULL, TRUE)
 
 do_fixed_horizon_global_forecasting("cif_2016", 15, "cif_2016_dataset.tsf", "pooled_regression")
@@ -206,6 +208,13 @@ do_fixed_horizon_local_forecasting("electricity_weekly", "dhr_arima", "electrici
 do_fixed_horizon_local_forecasting("solar_weekly", "dhr_arima", "solar_weekly_dataset.tsf", "series_name", "start_timestamp", 5)
 do_fixed_horizon_local_forecasting("kaggle_web_traffic_weekly", "dhr_arima", "kaggle_web_traffic_weekly_dataset.tsf", "series_name", "start_timestamp", 8, TRUE)
 do_fixed_horizon_local_forecasting("dominick", "dhr_arima", "dominick_dataset.tsf", NULL, NULL, 8)
+
+do_fixed_horizon_local_forecasting("nn5_weekly", "ets", "nn5_weekly_dataset.tsf", "series_name", "start_timestamp", 8)
+do_fixed_horizon_local_forecasting("traffic_weekly", "ets", "traffic_weekly_dataset.tsf", "series_name", "start_timestamp", 8)
+do_fixed_horizon_local_forecasting("electricity_weekly", "ets", "electricity_weekly_dataset.tsf", "series_name", "start_timestamp", 8, TRUE)
+do_fixed_horizon_local_forecasting("solar_weekly", "ets", "solar_weekly_dataset.tsf", "series_name", "start_timestamp", 5)
+do_fixed_horizon_local_forecasting("kaggle_web_traffic_weekly", "ets", "kaggle_web_traffic_weekly_dataset.tsf", "series_name", "start_timestamp", 8, TRUE)
+do_fixed_horizon_local_forecasting("dominick", "ets", "dominick_dataset.tsf", NULL, NULL, 8)
 
 do_fixed_horizon_global_forecasting("nn5_weekly", 65, "nn5_weekly_dataset.tsf", "pooled_regression", "series_name", "start_timestamp", 8)
 do_fixed_horizon_global_forecasting("traffic_weekly", 65, "traffic_weekly_dataset.tsf", "pooled_regression", "series_name", "start_timestamp", 8)
@@ -319,6 +328,14 @@ do_fixed_horizon_local_forecasting("kdd_cup", "dhr_arima", "kdd_cup_2018_dataset
 do_fixed_horizon_local_forecasting("melbourne_pedestrian_counts", "dhr_arima", "pedestrian_counts_dataset.tsf", "series_name", "start_timestamp", 24, TRUE)
 do_fixed_horizon_local_forecasting("aus_elecdemand", "dhr_arima", "australian_electricity_demand_dataset.tsf", "series_name", "start_timestamp", 336)
 do_fixed_horizon_local_forecasting("rideshare", "dhr_arima", "rideshare_dataset_without_missing_values.tsf", "series_name", "start_timestamp", 168)
+
+do_fixed_horizon_local_forecasting("traffic_hourly", "ets", "traffic_hourly_dataset.tsf", "series_name", "start_timestamp", 168)
+do_fixed_horizon_local_forecasting("electricity_hourly", "ets", "electricity_hourly_dataset.tsf", "series_name", "start_timestamp", 168, TRUE)
+do_fixed_horizon_local_forecasting("solar_10_minutes", "ets", "solar_10_minutes_dataset.tsf", "series_name", "start_timestamp", 1008)
+do_fixed_horizon_local_forecasting("kdd_cup", "ets", "kdd_cup_2018_dataset_without_missing_values.tsf", "series_name", "start_timestamp", 168)
+do_fixed_horizon_local_forecasting("melbourne_pedestrian_counts", "ets", "pedestrian_counts_dataset.tsf", "series_name", "start_timestamp", 24, TRUE)
+do_fixed_horizon_local_forecasting("aus_elecdemand", "ets", "australian_electricity_demand_dataset.tsf", "series_name", "start_timestamp", 336)
+do_fixed_horizon_local_forecasting("rideshare", "ets", "rideshare_dataset_without_missing_values.tsf", "series_name", "start_timestamp", 168)
 
 do_fixed_horizon_global_forecasting("traffic_hourly", 30, "traffic_hourly_dataset.tsf", "pooled_regression", "series_name", "start_timestamp", 168)
 do_fixed_horizon_global_forecasting("electricity_hourly", 30, "electricity_hourly_dataset.tsf", "pooled_regression", "series_name", "start_timestamp", 168, TRUE)
