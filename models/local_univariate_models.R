@@ -54,7 +54,7 @@ get_arima_forecasts <- function(time_series, forecast_horizon, model = NULL){
     })
     
     tryCatch({
-      f <- forecast(fit, h = forecast_horizon)$mean
+      f <- forecast:::forecast.Arima(fit, h = forecast_horizon)$mean
       list(f, fit)
     }, error = function(e) { 
         warning(e)
