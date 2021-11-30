@@ -118,11 +118,12 @@ The forecasts provided by the new models you integrate will also be automaticall
 When using this repository, please cite:
 
 ```{r} 
-@misc{godahewa2021monash,
-    author="Godahewa, Rakshitha and Bergmeir, Christoph and Webb, Geoffrey I. and Hyndman, Rob J. and Montero-Manso, Pablo",
-    title="Monash Time Series Forecasting Archive",
-    howpublished ="\url{https://arxiv.org/abs/2105.06643}",
-    year="2021"
+@InProceedings{godahewa2021monash,
+    author = "Godahewa, Rakshitha and Bergmeir, Christoph and Webb, Geoffrey I. and Hyndman, Rob J. and Montero-Manso, Pablo",
+    title = "Monash Time Series Forecasting Archive",
+    booktitle = "Neural Information Processing Systems Track on Datasets and Benchmarks",
+    year = "2021",
+    note = "forthcoming"
 }
 ```
 
