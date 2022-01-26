@@ -1,6 +1,5 @@
 from datetime import datetime
-from numpy import distutils
-import distutils
+from distutils.util import strtobool
 import pandas as pd
 
 # Converts the contents in a .tsf file into a dataframe and returns it along with other meta-data of the dataset: frequency, horizon, whether the dataset contains missing values and whether the series have equal lengths
@@ -46,9 +45,9 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
                             elif line.startswith("@horizon"):
                                 forecast_horizon = int(line_content[1])
                             elif line.startswith("@missing"):
-                                contain_missing_values = bool(distutils.util.strtobool(line_content[1]))
+                                contain_missing_values = bool(strtobool(line_content[1]))
                             elif line.startswith("@equallength"):
-                                contain_equal_length = bool(distutils.util.strtobool(line_content[1]))
+                                contain_equal_length = bool(strtobool(line_content[1]))
 
                     else:
                         if len(col_names) == 0:
