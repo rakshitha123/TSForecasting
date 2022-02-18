@@ -1,6 +1,8 @@
 from datetime import datetime
 from distutils.util import strtobool
+
 import pandas as pd
+
 
 # Converts the contents in a .tsf file into a dataframe and returns it along with other meta-data of the dataset: frequency, horizon, whether the dataset contains missing values and whether the series have equal lengths
 #
@@ -8,7 +10,11 @@ import pandas as pd
 # full_file_path_and_name - complete .tsf file path
 # replace_missing_vals_with - a term to indicate the missing values in series in the returning dataframe
 # value_column_name - Any name that is preferred to have as the name of the column containing series values in the returning dataframe
-def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with = 'NaN', value_column_name = "series_value"):
+def convert_tsf_to_dataframe(
+    full_file_path_and_name,
+    replace_missing_vals_with="NaN",
+    value_column_name="series_value",
+):
     col_names = []
     col_types = []
     all_data = {}
@@ -21,23 +27,27 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
     found_data_section = False
     started_reading_data_section = False
 
-    with open(full_file_path_and_name, 'r', encoding='cp1252') as file:
+    with open(full_file_path_and_name, "r", encoding="cp1252") as file:
         for line in file:
             # Strip white space from start/end of line
             line = line.strip()
 
             if line:
-                if line.startswith("@"): # Read meta-data
+                if line.startswith("@"):  # Read meta-data
                     if not line.startswith("@data"):
                         line_content = line.split(" ")
                         if line.startswith("@attribute"):
-                            if (len(line_content) != 3):  # Attributes have both name and type
+                            if (
+                                len(line_content) != 3
+                            ):  # Attributes have both name and type
                                 raise Exception("Invalid meta-data specification.")
 
                             col_names.append(line_content[1])
                             col_types.append(line_content[2])
                         else:
-                            if len(line_content) != 2:  # Other meta-data have only values
+                            if (
+                                len(line_content) != 2
+                            ):  # Other meta-data have only values
                                 raise Exception("Invalid meta-data specification.")
 
                             if line.startswith("@frequency"):
@@ -45,18 +55,24 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
                             elif line.startswith("@horizon"):
                                 forecast_horizon = int(line_content[1])
                             elif line.startswith("@missing"):
-                                contain_missing_values = bool(strtobool(line_content[1]))
+                                contain_missing_values = bool(
+                                    strtobool(line_content[1])
+                                )
                             elif line.startswith("@equallength"):
                                 contain_equal_length = bool(strtobool(line_content[1]))
 
                     else:
                         if len(col_names) == 0:
-                            raise Exception("Missing attribute section. Attribute section must come before data.")
+                            raise Exception(
+                                "Missing attribute section. Attribute section must come before data."
+                            )
 
                         found_data_tag = True
                 elif not line.startswith("#"):
                     if len(col_names) == 0:
-                        raise Exception("Missing attribute section. Attribute section must come before data.")
+                        raise Exception(
+                            "Missing attribute section. Attribute section must come before data."
+                        )
                     elif not found_data_tag:
                         raise Exception("Missing @data tag.")
                     else:
@@ -76,8 +92,10 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
                         series = full_info[len(full_info) - 1]
                         series = series.split(",")
 
-                        if(len(series) == 0):
-                            raise Exception("A given series should contains a set of comma separated numeric values. At least one numeric value should be there in a series. Missing values should be indicated with ? symbol")
+                        if len(series) == 0:
+                            raise Exception(
+                                "A given series should contains a set of comma separated numeric values. At least one numeric value should be there in a series. Missing values should be indicated with ? symbol"
+                            )
 
                         numeric_series = []
 
@@ -87,8 +105,12 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
                             else:
                                 numeric_series.append(float(val))
 
-                        if (numeric_series.count(replace_missing_vals_with) == len(numeric_series)):
-                            raise Exception("All series values are missing. A given series should contains a set of comma separated numeric values. At least one numeric value should be there in a series.")
+                        if numeric_series.count(replace_missing_vals_with) == len(
+                            numeric_series
+                        ):
+                            raise Exception(
+                                "All series values are missing. A given series should contains a set of comma separated numeric values. At least one numeric value should be there in a series."
+                            )
 
                         all_series.append(pd.Series(numeric_series).array)
 
@@ -99,11 +121,15 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
                             elif col_types[i] == "string":
                                 att_val = str(full_info[i])
                             elif col_types[i] == "date":
-                                att_val = datetime.strptime(full_info[i], '%Y-%m-%d %H-%M-%S')
+                                att_val = datetime.strptime(
+                                    full_info[i], "%Y-%m-%d %H-%M-%S"
+                                )
                             else:
-                                raise Exception("Invalid attribute type.") # Currently, the code supports only numeric, string and date types. Extend this as required.
+                                raise Exception(
+                                    "Invalid attribute type."
+                                )  # Currently, the code supports only numeric, string and date types. Extend this as required.
 
-                            if(att_val == None):
+                            if att_val is None:
                                 raise Exception("Invalid attribute value.")
                             else:
                                 all_data[col_names[i]].append(att_val)
@@ -120,7 +146,13 @@ def convert_tsf_to_dataframe(full_file_path_and_name, replace_missing_vals_with 
         all_data[value_column_name] = all_series
         loaded_data = pd.DataFrame(all_data)
 
-        return loaded_data, frequency, forecast_horizon, contain_missing_values, contain_equal_length
+        return (
+            loaded_data,
+            frequency,
+            forecast_horizon,
+            contain_missing_values,
+            contain_equal_length,
+        )
 
 
 # Example of usage
