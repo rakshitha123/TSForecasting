@@ -122,8 +122,7 @@ When using this repository, please cite:
     author = "Godahewa, Rakshitha and Bergmeir, Christoph and Webb, Geoffrey I. and Hyndman, Rob J. and Montero-Manso, Pablo",
     title = "Monash Time Series Forecasting Archive",
     booktitle = "Neural Information Processing Systems Track on Datasets and Benchmarks",
-    year = "2021",
-    note = "forthcoming"
+    year = "2021"
 }
 ```
 
