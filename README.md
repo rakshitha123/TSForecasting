@@ -1,7 +1,7 @@
 # TSForecasting
 This repository contains the implementations related to the experiments of a set of publicly available datasets that are used in the time series forecasting research space.
 
-The benchmark datasets are available at: https://zenodo.org/communities/forecasting. For more details, please refer to our website: https://forecastingdata.org/ and paper: https://arxiv.org/abs/2105.06643.
+The benchmark datasets are available at: https://zenodo.org/communities/forecasting. For more details, please refer to our website: https://forecastingdata.org/ and paper: https://openreview.net/pdf?id=wEc1mgAjU-.
 
 All datasets contain univariate time series and they are availble in a new format that we name as .tsf, pioneered by the sktime .ts format. The data can be loaded into the R environment in tsibble format [1] by following the example in [utils/data_loader.R](https://github.com/rakshitha123/TSForecasting/blob/master/utils/data_loader.R). It uses a similar approach to the arff file loading method in R foreign package [2]. The data can be loaded into the Python environment as a Pandas dataframe by following the example in [utils/data_loader.py](https://github.com/rakshitha123/TSForecasting/blob/master/utils/data_loader.py). Download the .tsf files as required from our Zenodo dataset repository and put them into "tsf_data" folder.
 
