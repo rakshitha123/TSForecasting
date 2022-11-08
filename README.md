@@ -113,6 +113,19 @@ get_deep_nn_forecasts("nn5_daily", 9, "nn5_daily_dataset_without_missing_values.
 ## Evaluation of New Forecasting Models
 The forecasts provided by the new models you integrate will also be automatically evaluated in the same way as our forecasting models and thus, the results of your forecasting models and our forecasting models are directly comparable. You can also send the evaluation results of your new models, if you would like to publish them in our [website](https://forecastingdata.org/).
 
+# Software/Package Versions
+
+The versions of the softwares and packages that are used to conduct the experiments are mentioned in the following tables. Using the exact same versions is not mandatory, however, the reproducibility of the benchmark evaluation results may depend on that.
+
+| Software/Package       | Version        | 
+|------------------------|:--------------:|
+| R                      |  4.0.2         |
+| Python                 |  3.7.4         |
+| forecast               |  8.12          |
+| glmnet                 |  4.0.2         |
+| catboost               |  0.24.1        |
+| smooth                 |  2.6.0         |
+| GluonTS                |  0.8.0         |
 
 # Citing Our Work
 When using this repository, please cite:
