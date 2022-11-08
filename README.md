@@ -115,7 +115,7 @@ The forecasts provided by the new models you integrate will also be automaticall
 
 # Software/Package Versions
 
-The versions of the softwares and packages that are used to conduct the experiments are mentioned in the following table. Using the exact same versions is not mandatory, however, the reproducibility of the benchmark evaluation results may depend on that.
+The versions of the software and packages that are used to conduct the experiments are mentioned in the following table. Using the exact same versions is not mandatory, however, the reproducibility of the benchmark evaluation results may depend on that.
 
 | Software/Package       | Version        | 
 |------------------------|:--------------:|
